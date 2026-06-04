@@ -1,10 +1,10 @@
 # Kantineportalen
 
-Fagprøveprosjekt for en kantineportal. Prosjektet er satt opp med React og Vite i `client/`, og har en forberedt mappestruktur for videre arbeid med sider, komponenter, tjenester, ruter, dokumentasjon og eventuell serverkode.
+Fagprøveprosjekt for en kantineportal. Prosjektet er satt opp med React og Vite i `client/`, Tailwind CSS, lokal Inter-font og shadcn/ui-grunnstruktur. Det har også en forberedt mappestruktur for videre arbeid med sider, komponenter, tjenester, ruter, dokumentasjon og eventuell serverkode.
 
 ## Struktur
 
-- `client/` – React-klient opprettet med Vite
+- `client/` – React-klient opprettet med Vite, Tailwind CSS og shadcn/ui
 - `server/` – planlagt struktur for server, modeller, ruter og kontrollere
 - `docs/` – planlegging, dagslogger, Figma-filer og bilder
 
