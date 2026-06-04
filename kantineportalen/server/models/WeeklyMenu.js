@@ -1,0 +1,1 @@
+// Ukesmenymodell kommer senere.

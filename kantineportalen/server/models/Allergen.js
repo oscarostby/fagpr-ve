@@ -1,0 +1,1 @@
+// Allergenmodell kommer senere.
