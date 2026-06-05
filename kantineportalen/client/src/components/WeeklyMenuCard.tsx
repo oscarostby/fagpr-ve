@@ -1,4 +1,5 @@
 import type { WeeklyMenuItem } from '@/types/menu'
+import { MenuIcon } from '@/components/MenuIcon'
 
 type WeeklyMenuCardProps = {
   item: WeeklyMenuItem
@@ -10,17 +11,17 @@ export function WeeklyMenuCard({ item, isToday = false }: WeeklyMenuCardProps) {
     <article
       className={
         isToday
-          ? 'rounded-[1.5rem] border-2 border-primary bg-white p-5 shadow-xl shadow-sky-900/10'
-          : 'rounded-[1.5rem] border border-slate-100 bg-white p-5 shadow-lg shadow-slate-900/5'
+          ? 'flex min-h-[58px] items-center justify-between rounded-[7px] border border-[#2f8035] bg-[#f7f8f2] px-3 py-2 text-[#0d3831] md:min-h-[151px] md:flex-col md:justify-start md:rounded-[6px] md:px-5 md:py-[19px]'
+          : 'flex min-h-[58px] items-center justify-between rounded-[7px] border border-transparent bg-[#f1f3ed] px-3 py-2 text-[#0d3831] md:min-h-[151px] md:flex-col md:justify-start md:rounded-[6px] md:px-5 md:py-[19px]'
       }
     >
-      <p className="text-sm font-black uppercase tracking-[0.22em] text-primary">{item.day}</p>
-      <h3 className="mt-4 text-2xl font-extrabold leading-tight text-slate-950">{item.title}</h3>
-      {isToday ? (
-        <p className="mt-5 inline-flex rounded-full bg-cyan-50 px-3 py-1 text-sm font-bold text-slate-700">
-          Dagens meny
-        </p>
-      ) : null}
+      <div className="min-w-0 md:text-center">
+        <p className="text-[8px] font-black uppercase leading-none text-[#2f8035] md:text-[10px]">{item.day}</p>
+        <h3 className="mt-[7px] max-w-[190px] text-[10px] font-semibold leading-[1.22] tracking-[-0.02em] md:mt-4 md:max-w-[104px] md:text-[15px] md:leading-[1.25]">
+          {item.title}
+        </h3>
+      </div>
+      <MenuIcon type={item.icon} className="h-10 w-10 shrink-0 text-[#2f8035] md:mt-auto md:h-[52px] md:w-[52px]" />
     </article>
   )
 }

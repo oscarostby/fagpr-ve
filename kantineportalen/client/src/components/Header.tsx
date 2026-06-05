@@ -1,22 +1,14 @@
-import { Container } from '@/components/Container'
 import lightLogo from '@/assets/images/logosommer.png'
-import darkLogo from '@/assets/images/logosommer1.png'
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-20 border-b border-sky-100/80 bg-white/90 backdrop-blur-xl">
-      <Container className="flex h-20 items-center justify-between gap-4 sm:h-24">
-        <a className="flex items-center gap-3 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4" href="/" aria-label="Kantineportalen forside">
-          <picture>
-            <source srcSet={darkLogo} media="(prefers-color-scheme: dark)" />
-            <img className="h-12 w-12 rounded-2xl object-cover shadow-md sm:h-14 sm:w-14" src={lightLogo} alt="Kantineportalen logo" />
-          </picture>
-          <span className="text-xl font-black tracking-tight text-slate-950 sm:text-3xl">Kantineportalen</span>
-        </a>
-        <div className="hidden rounded-full bg-sky-50 px-5 py-3 text-base font-bold text-slate-700 sm:block">
-          Lunsj 11:00 - 13:00
-        </div>
-      </Container>
+    <header className="relative h-[78px] overflow-hidden bg-[#083d34] text-white md:h-[78px]">
+      <div className="absolute bottom-0 left-[270px] hidden h-5 w-16 rounded-tl-[28px] bg-[#fbfbf7] md:block" />
+      <div className="absolute bottom-0 left-[92px] h-3 w-12 rounded-tl-[22px] bg-[#fbfbf7] md:hidden" />
+      <a href="/" aria-label="Kantineportalen forside" className="relative z-10 flex h-full items-center gap-4 px-8 md:px-10">
+        <img src={lightLogo} alt="Kantineportalen logo" className="h-11 w-11 object-contain md:h-12 md:w-12" />
+        <span className="text-[18px] font-extrabold tracking-[-0.03em] md:text-[19px]">Kantineportalen</span>
+      </a>
     </header>
   )
 }

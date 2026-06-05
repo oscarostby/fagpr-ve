@@ -6,7 +6,10 @@ export type Lunch = {
 
 export type Weekday = 'Mandag' | 'Tirsdag' | 'Onsdag' | 'Torsdag' | 'Fredag'
 
+export type MenuIconType = 'soup' | 'wok' | 'fish' | 'plant' | 'pizza'
+
 export type WeeklyMenuItem = {
   day: Weekday
   title: string
+  icon: MenuIconType
 }
