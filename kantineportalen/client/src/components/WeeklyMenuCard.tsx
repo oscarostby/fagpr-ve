@@ -31,7 +31,7 @@ const DishTitle = styled.h3.attrs({
 })``
 
 const iconClassName =
-  'h-8 w-8 shrink-0 text-[#5ba05f] md:mt-auto md:h-[44px] md:w-[44px] xl:h-[50px] xl:w-[50px]'
+  'h-7 w-7 shrink-0 text-[#5ba05f] md:mt-auto md:h-9 md:w-9 xl:h-10 xl:w-10'
 
 export function WeeklyMenuCard({ item, isToday = false }: WeeklyMenuCardProps) {
   return (

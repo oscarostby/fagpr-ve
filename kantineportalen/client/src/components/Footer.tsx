@@ -19,7 +19,7 @@ const BottomRule = styled.div.attrs({
 })``
 
 const FooterInner = styled.div.attrs({
-  className: 'mx-auto flex h-full max-w-[1370px] items-center justify-end gap-8 px-8 md:gap-10 md:px-[42px]',
+  className: 'flex h-full w-full items-center justify-end gap-8 px-8 md:gap-10 md:px-[42px]',
 })``
 
 const Divider = styled.div.attrs({

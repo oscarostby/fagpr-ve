@@ -3,13 +3,15 @@ import styled from 'styled-components'
 import { LunchCard } from '@/components/LunchCard'
 import { WeeklyMenuCard } from '@/components/WeeklyMenuCard'
 import { todayLunch, weeklyMenu } from '@/data/mockMenu'
+import type { Weekday } from '@/types/menu'
 
 const PageMain = styled.main.attrs({
-  className: 'flex-1 overflow-visible md:min-h-0',
+  className: 'flex-1 overflow-visible',
 })``
 
 const PageInner = styled.section.attrs({
-  className: 'mx-auto flex h-full max-w-[1370px] flex-col px-8 pb-0 pt-9 md:px-[42px] md:pt-[14px] xl:pt-[28px]',
+  className:
+    'mx-auto flex h-full w-full max-w-[1370px] flex-col px-8 pb-0 pt-9 md:px-[42px] md:pt-[14px] xl:pt-[28px]',
 })``
 
 const WeeklySection = styled.section.attrs({
@@ -25,8 +27,16 @@ const WeeklyGrid = styled.div.attrs({
   className: 'grid gap-2 md:grid-cols-5 md:gap-6',
 })``
 
+const weekdays: Record<number, Weekday> = {
+  1: 'Mandag',
+  2: 'Tirsdag',
+  3: 'Onsdag',
+  4: 'Torsdag',
+  5: 'Fredag',
+}
+
 export function HomePage() {
-  const highlightedDay = weeklyMenu.find((item) => item.title === todayLunch.title)?.day
+  const highlightedDay = weekdays[new Date().getDay()]
 
   return (
     <PageMain>

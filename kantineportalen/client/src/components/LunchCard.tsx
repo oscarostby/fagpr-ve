@@ -63,7 +63,7 @@ const AllergensText = styled.p.attrs({
 
 const LunchImage = styled.img.attrs({
   className:
-    'h-[170px] w-full rounded-[8px] object-cover object-center shadow-[0_12px_32px_rgba(20,35,28,0.12)] md:mt-[4px] md:h-full md:w-120 md:justify-self-end xl:h-[310px] xl:w-[150px]',
+    'h-[170px] w-full rounded-[8px] object-cover object-center shadow-[0_12px_32px_rgba(20,35,28,0.12)] md:mt-[4px] md:h-[280px] md:w-full md:justify-self-end xl:h-[310px]',
 })``
 
 export function LunchCard({ lunch }: LunchCardProps) {
