@@ -14,7 +14,7 @@ function LeafGraphic() {
 
 export function Footer() {
   return (
-    <footer className="relative mt-0 h-[120px] overflow-hidden bg-[#f1f4ec]">
+    <footer className="relative mt-8 h-[120px] overflow-hidden bg-[#f1f4ec]">
       <LeafGraphic />
       <div className="absolute bottom-0 left-0 h-[4px] w-full bg-[#2c8335]" />
       <div className="mx-auto flex h-full max-w-[1400px] items-center justify-end gap-8 px-8 md:gap-10">
