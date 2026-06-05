@@ -1,30 +1,68 @@
+import styled from 'styled-components'
+
+import leavesImage from '@/assets/images/blader.png'
+
+const LeafCrop = styled.span.attrs({
+  className: 'absolute bottom-[-6px] left-7 block h-[122px] w-[142px] overflow-hidden md:left-[42px] md:h-[128px] md:w-[150px]',
+})``
+
+const LeafImage = styled.img.attrs({
+  className: 'absolute left-[-134px] top-[-44px] h-[235px] w-[353px] max-w-none object-contain mix-blend-multiply',
+})``
+
+const SiteFooter = styled.footer.attrs({
+  className: 'relative mt-8 h-[122px] shrink-0 overflow-hidden bg-[#f1f4ec] md:mt-0 md:h-[125px]',
+})``
+
+const BottomRule = styled.div.attrs({
+  className: 'absolute bottom-0 left-0 h-[4px] w-full bg-[#2c8335]',
+})``
+
+const FooterInner = styled.div.attrs({
+  className: 'mx-auto flex h-full max-w-[1370px] items-center justify-end gap-8 px-8 md:gap-10 md:px-[42px]',
+})``
+
+const Divider = styled.div.attrs({
+  className: 'h-[72px] w-px bg-[#2c8335] md:h-[86px]',
+})``
+
+const ContactAddress = styled.address.attrs({
+  className: 'w-[210px] not-italic text-[#003f35] md:w-[270px]',
+})``
+
+const ContactHeading = styled.p.attrs({
+  className: 'text-[13px] font-extrabold uppercase leading-none text-[#2c8335] md:text-[14px]',
+})``
+
+const EmailLink = styled.a.attrs({
+  className: 'mt-4 block text-[14px] font-semibold tracking-[-0.02em] hover:underline md:text-[15px]',
+})``
+
+const PhoneLink = styled.a.attrs({
+  className: 'mt-2 block text-[14px] font-semibold tracking-[-0.02em] hover:underline md:text-[15px]',
+})``
+
 function LeafGraphic() {
   return (
-    <svg viewBox="0 0 150 150" aria-hidden="true" className="absolute bottom-[-8px] left-8 h-[116px] w-[116px] text-[#2c8335] md:left-10">
-      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.45">
-        <path d="M10 148C40 106 57 65 53 13" />
-        <path d="M54 14C81 30 90 56 82 86 58 70 49 44 54 14Z" />
-        <path d="M31 112C54 99 79 103 101 121 73 137 50 133 31 112Z" />
-        <path d="M47 84C64 63 86 56 116 62 96 85 72 96 47 84Z" />
-        <path d="M16 142 68 99" />
-      </g>
-    </svg>
+    <LeafCrop aria-hidden="true">
+      <LeafImage src={leavesImage} alt="" />
+    </LeafCrop>
   )
 }
 
 export function Footer() {
   return (
-    <footer className="relative mt-8 h-[120px] overflow-hidden bg-[#f1f4ec]">
+    <SiteFooter>
       <LeafGraphic />
-      <div className="absolute bottom-0 left-0 h-[4px] w-full bg-[#2c8335]" />
-      <div className="mx-auto flex h-full max-w-[1400px] items-center justify-end gap-8 px-8 md:gap-10">
-        <div className="h-[72px] w-px bg-[#2c8335]" />
-        <address className="w-[210px] not-italic text-[#003f35]">
-          <p className="text-[14px] font-bold uppercase leading-none text-[#2c8335]">Kontakt</p>
-          <a className="mt-4 block text-[15px] font-semibold tracking-[-0.035em] hover:underline" href="mailto:kantine@bedrift.no">kantine@bedrift.no</a>
-          <a className="mt-2 block text-[15px] font-semibold tracking-[-0.035em] hover:underline" href="tel:+4712345678">12 34 56 78</a>
-        </address>
-      </div>
-    </footer>
+      <BottomRule />
+      <FooterInner>
+        <Divider />
+        <ContactAddress>
+          <ContactHeading>Kontakt</ContactHeading>
+          <EmailLink href="mailto:kantine@bedrift.no">kantine@bedrift.no</EmailLink>
+          <PhoneLink href="tel:+471****5678">12 34 56 78</PhoneLink>
+        </ContactAddress>
+      </FooterInner>
+    </SiteFooter>
   )
 }

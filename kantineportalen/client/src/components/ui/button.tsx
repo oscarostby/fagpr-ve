@@ -1,4 +1,5 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
@@ -30,11 +31,15 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {}
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, ...props }, ref) => (
-    <button className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
-  ),
-)
+type StyledButtonProps = ButtonProps
+
+const StyledButton = styled.button.attrs<StyledButtonProps>(({ className, variant, size }) => ({
+  className: cn(buttonVariants({ variant, size, className })),
+}))<StyledButtonProps>``
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, variant, size, ...props }, ref) => (
+  <StyledButton className={className} ref={ref} size={size} variant={variant} {...props} />
+))
 Button.displayName = 'Button'
 
 export { Button, buttonVariants }
