@@ -1,12 +1,12 @@
 function LeafGraphic() {
   return (
-    <svg viewBox="0 0 130 110" aria-hidden="true" className="absolute bottom-0 left-6 h-[98px] w-[116px] text-[#2f8035] md:left-8 md:h-[100px] md:w-[122px]">
-      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25">
-        <path d="M4 108C27 79 40 47 38 13" />
-        <path d="M39 14C61 26 68 45 62 66 44 55 37 37 39 14Z" />
-        <path d="M22 82C39 73 57 75 73 88 53 99 36 96 22 82Z" />
-        <path d="M34 63C45 48 60 42 80 45 67 62 51 69 34 63Z" />
-        <path d="M9 104 47 73" />
+    <svg viewBox="0 0 150 160" aria-hidden="true" className="absolute bottom-[-6px] left-[25px] h-[126px] w-[128px] text-[#2c8335] md:bottom-[-8px] md:left-[50px] md:h-[162px] md:w-[158px]">
+      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.45">
+        <path d="M10 158C41 112 58 68 54 12" />
+        <path d="M55 13C83 31 93 58 84 90 59 73 50 45 55 13Z" />
+        <path d="M32 117C56 104 82 108 104 128 75 144 51 140 32 117Z" />
+        <path d="M48 88C65 66 88 58 119 64 99 88 74 100 48 88Z" />
+        <path d="M16 152 69 104" />
       </g>
     </svg>
   )
@@ -14,15 +14,15 @@ function LeafGraphic() {
 
 export function Footer() {
   return (
-    <footer className="relative mt-8 h-[100px] overflow-hidden bg-[#f1f4ec] md:mt-0 md:h-[115px]">
+    <footer className="relative h-[144px] overflow-hidden bg-[#f1f4ec] md:h-[184px]">
       <LeafGraphic />
-      <div className="absolute bottom-0 left-0 h-[4px] w-full bg-[#2f8035]" />
-      <div className="ml-[52%] flex h-full items-center gap-7 md:ml-[66%] md:gap-7">
-        <div className="h-[44px] w-px bg-[#2f8035] md:h-[52px]" />
-        <address className="not-italic text-[#0d3831]">
-          <p className="text-[10px] font-black uppercase text-[#2f8035] md:text-[11px]">Kontakt</p>
-          <a className="mt-3 block text-[11px] font-medium hover:underline md:text-[12px]" href="mailto:kantine@bedrift.no">kantine@bedrift.no</a>
-          <a className="mt-2 block text-[11px] font-medium hover:underline md:text-[12px]" href="tel:+4712345678">12 34 56 78</a>
+      <div className="absolute bottom-0 left-0 h-[5px] w-full bg-[#2c8335]" />
+      <div className="ml-[54%] flex h-full items-center gap-[28px] md:ml-[75%] md:gap-[46px]">
+        <div className="h-[72px] w-px bg-[#2c8335] md:h-[99px]" />
+        <address className="not-italic text-[#003f35]">
+          <p className="text-[11px] font-black uppercase leading-none text-[#2c8335] md:text-[14px]">Kontakt</p>
+          <a className="mt-[19px] block text-[12px] font-semibold tracking-[-0.04em] hover:underline md:text-[15px]" href="mailto:kantine@y3.no">kantine@y3.no</a>
+          <a className="mt-[12px] block text-[12px] font-semibold tracking-[-0.04em] hover:underline md:text-[15px]" href="tel:+4712345678">12 34 56 78</a>
         </address>
       </div>
     </footer>

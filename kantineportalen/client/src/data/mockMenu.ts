@@ -24,7 +24,7 @@ export const weeklyMenu: WeeklyMenuItem[] = [
   },
   {
     day: 'Torsdag',
-    title: 'Pastasalat med skinke',
+    title: 'Pastasalat med kylling',
     icon: 'plant',
   },
   {
