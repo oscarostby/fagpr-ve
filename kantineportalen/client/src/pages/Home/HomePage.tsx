@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { LunchCard } from '@/components/LunchCard'
 import { WeeklyMenuCard } from '@/components/WeeklyMenuCard'
-import { todayLunch, weeklyMenu } from '@/data/mockMenu'
+import { getFrontendMenu, type FrontendMenu } from '@/services/menuService'
 import type { Weekday } from '@/types/menu'
 
 const PageMain = styled.main.attrs({
@@ -35,18 +36,53 @@ const weekdays: Record<number, Weekday> = {
   5: 'Fredag',
 }
 
+const emptyMenu: FrontendMenu = {
+  todayLunch: {
+    title: 'Ingen rett satt opp',
+    servingTime: '11:00 - 13:00',
+    allergens: [],
+    image: '',
+  },
+  weeklyMenu: [
+    { day: 'Mandag', title: 'Ingen rett satt opp' },
+    { day: 'Tirsdag', title: 'Ingen rett satt opp' },
+    { day: 'Onsdag', title: 'Ingen rett satt opp' },
+    { day: 'Torsdag', title: 'Ingen rett satt opp' },
+    { day: 'Fredag', title: 'Ingen rett satt opp' },
+  ],
+}
+
 export function HomePage() {
   const highlightedDay = weekdays[new Date().getDay()]
+  const [menu, setMenu] = useState<FrontendMenu>(emptyMenu)
+
+  useEffect(() => {
+    let isMounted = true
+
+    getFrontendMenu()
+      .then((backendMenu) => {
+        if (isMounted) {
+          setMenu(backendMenu)
+        }
+      })
+      .catch((error) => {
+        console.error('Kunne ikke hente meny fra backend:', error)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   return (
     <PageMain>
       <PageInner>
-        <LunchCard lunch={todayLunch} />
+        <LunchCard lunch={menu.todayLunch} />
 
         <WeeklySection aria-labelledby="weekly-menu-heading">
           <WeeklyHeading id="weekly-menu-heading">Ukesmeny</WeeklyHeading>
           <WeeklyGrid>
-            {weeklyMenu.map((item) => (
+            {menu.weeklyMenu.map((item) => (
               <WeeklyMenuCard item={item} isToday={item.day === highlightedDay} key={item.day} />
             ))}
           </WeeklyGrid>

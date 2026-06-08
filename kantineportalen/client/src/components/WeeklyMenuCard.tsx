@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { MenuIcon } from '@/components/MenuIcon'
 import type { WeeklyMenuItem } from '@/types/menu'
+import { getDishIcon } from '@/utils/dishIcons'
 
 type WeeklyMenuCardProps = {
   item: WeeklyMenuItem
@@ -34,6 +34,8 @@ const iconClassName =
   'h-7 w-7 shrink-0 text-[#5ba05f] md:mt-auto md:h-9 md:w-9 xl:h-10 xl:w-10'
 
 export function WeeklyMenuCard({ item, isToday = false }: WeeklyMenuCardProps) {
+  const DishIcon = getDishIcon(item.title)
+
   return (
     <Card $isToday={isToday}>
       <TextGroup>
@@ -41,7 +43,7 @@ export function WeeklyMenuCard({ item, isToday = false }: WeeklyMenuCardProps) {
         <DishTitle>{item.title}</DishTitle>
       </TextGroup>
 
-      <MenuIcon type={item.icon} className={iconClassName} />
+      <DishIcon aria-hidden="true" className={iconClassName} strokeWidth={1.35} />
     </Card>
   )
 }

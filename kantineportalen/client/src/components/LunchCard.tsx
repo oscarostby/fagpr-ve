@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { Clock } from 'lucide-react'
 
 import type { Lunch } from '@/types/menu'
-import lasagneImage from '@/assets/images/lasagne-salat.png'
 
 type LunchCardProps = {
   lunch: Lunch
@@ -66,6 +65,11 @@ const LunchImage = styled.img.attrs({
     'h-[170px] w-full rounded-[8px] object-cover object-center shadow-[0_12px_32px_rgba(20,35,28,0.12)] md:mt-[4px] md:h-[280px] md:w-full md:justify-self-end xl:h-[310px]',
 })``
 
+const MissingImage = styled.div.attrs({
+  className:
+    'grid h-[170px] w-full place-items-center rounded-[8px] bg-[#f4f6f2] text-sm font-semibold text-[#003f35] shadow-[0_12px_32px_rgba(20,35,28,0.08)] md:mt-[4px] md:h-[280px] xl:h-[310px]',
+})``
+
 export function LunchCard({ lunch }: LunchCardProps) {
   return (
     <LunchSection>
@@ -85,11 +89,11 @@ export function LunchCard({ lunch }: LunchCardProps) {
 
         <Allergens>
           <AllergensLabel>Allergener</AllergensLabel>
-          <AllergensText>{lunch.allergens.join(', ')}</AllergensText>
+          <AllergensText>{lunch.allergens.length ? lunch.allergens.join(', ') : 'Ingen registrerte allergener'}</AllergensText>
         </Allergens>
       </TextColumn>
 
-      <LunchImage src={lasagneImage} alt={lunch.title} />
+      {lunch.image ? <LunchImage src={lunch.image} alt={lunch.title} /> : <MissingImage>Ingen bilde valgt</MissingImage>}
     </LunchSection>
   )
 }

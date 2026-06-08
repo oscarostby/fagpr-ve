@@ -2,6 +2,7 @@ export type Lunch = {
   title: string
   servingTime: string
   allergens: string[]
+  image: string
 }
 
 export type Weekday = 'Mandag' | 'Tirsdag' | 'Onsdag' | 'Torsdag' | 'Fredag'
@@ -26,10 +27,7 @@ export type DishAdminValidationResult = {
   missingFields: Array<keyof Pick<DishAdminDraft, 'title' | 'day' | 'servingTime'>>
 }
 
-export type MenuIconType = 'soup' | 'wok' | 'fish' | 'plant' | 'pizza'
-
 export type WeeklyMenuItem = {
   day: Weekday
   title: string
-  icon: MenuIconType
 }
