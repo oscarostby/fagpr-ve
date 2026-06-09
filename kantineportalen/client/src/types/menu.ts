@@ -1,7 +1,10 @@
+import type { DietaryTag } from '@/utils/dietaryTags'
+
 export type Lunch = {
   title: string
   servingTime: string
   allergens: string[]
+  dietaryTags: DietaryTag[]
   image: string
 }
 
@@ -30,4 +33,6 @@ export type DishAdminValidationResult = {
 export type WeeklyMenuItem = {
   day: Weekday
   title: string
+  allergens: string[]
+  dietaryTags: DietaryTag[]
 }

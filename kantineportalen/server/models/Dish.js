@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+import { allowedDietaryTags } from '../utils/dietaryTags.js'
+
 const dishSchema = new mongoose.Schema(
   {
     name: {
@@ -29,6 +31,15 @@ const dishSchema = new mongoose.Schema(
         ref: 'Allergen',
       },
     ],
+    dietaryTags: {
+      type: [
+        {
+          type: String,
+          enum: allowedDietaryTags,
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true },
 )

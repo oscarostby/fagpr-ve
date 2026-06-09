@@ -1,3 +1,4 @@
+import { ImagePlus, Pencil, Plus, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 
 import { useAuth } from '@/auth/AuthContext'
@@ -12,12 +13,14 @@ import {
   type DishPayload,
 } from '@/services/adminService'
 import { getAssetUrl, isUnauthorizedError } from '@/services/api'
+import { dietaryTagIcon, dietaryTagLabel, dietaryTagOptions, type DietaryTag } from '@/utils/dietaryTags'
 
 type DishFormState = {
   name: string
   description: string
   imageFile: File | null
   allergens: string[]
+  dietaryTags: DietaryTag[]
 }
 
 const emptyForm: DishFormState = {
@@ -25,6 +28,7 @@ const emptyForm: DishFormState = {
   description: '',
   imageFile: null,
   allergens: [],
+  dietaryTags: [],
 }
 
 const allowedImageTypes = new Set(['image/jpeg', 'image/png', 'image/webp'])
@@ -37,6 +41,7 @@ function toForm(dish: ApiDish): DishFormState {
     description: dish.description || '',
     imageFile: null,
     allergens: dish.allergens?.map((allergen) => allergen._id) || [],
+    dietaryTags: dish.dietaryTags || [],
   }
 }
 
@@ -46,6 +51,7 @@ function toPayload(form: DishFormState): DishPayload {
     description: form.description.trim(),
     imageFile: form.imageFile,
     allergens: form.allergens,
+    dietaryTags: form.dietaryTags,
   }
 }
 
@@ -67,6 +73,7 @@ export function DishesPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState('')
   const [imageError, setImageError] = useState('')
+  const [success, setSuccess] = useState('')
   const [previewUrl, setPreviewUrl] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -194,16 +201,29 @@ export function DishesPage() {
 
     setIsSaving(true)
     setError('')
+    setSuccess('')
 
     try {
       const payload = toPayload(form)
+      let savedDish: ApiDish
       if (editingId) {
-        await updateDish(editingId, payload, token)
+        savedDish = await updateDish(editingId, payload, token)
       } else {
-        await createDish(payload, token)
+        savedDish = await createDish(payload, token)
       }
+
+      const savedTagSet = new Set(savedDish.dietaryTags)
+      if (payload.dietaryTags?.some((tag) => !savedTagSet.has(tag))) {
+        throw new Error('Serveren lagret ikke alle kostholdsmerkene. Start backend på nytt og prøv igjen.')
+      }
+
+      setDishes((current) =>
+        editingId
+          ? current.map((dish) => (dish._id === savedDish._id ? savedDish : dish))
+          : [...current, savedDish].sort((a, b) => a.name.localeCompare(b.name, 'nb')),
+      )
+      setSuccess(`${savedDish.name} ble lagret med valgte allergener og kostholdsmerker.`)
       resetForm()
-      await loadData()
     } catch (saveError) {
       handleError(saveError)
     } finally {
@@ -245,148 +265,220 @@ export function DishesPage() {
     }))
   }
 
-  return (
-    <section>
-      <h2 className="text-lg font-bold">Retter</h2>
-      {error ? <p className="my-2 text-sm text-red-700">{error}</p> : null}
+  function toggleDietaryTag(tag: DietaryTag) {
+    setForm((current) => ({
+      ...current,
+      dietaryTags: current.dietaryTags.includes(tag)
+        ? current.dietaryTags.filter((currentTag) => currentTag !== tag)
+        : [...current.dietaryTags, tag],
+    }))
+  }
 
-      <form className="my-4 grid max-w-xl gap-3 border p-3" encType="multipart/form-data" onSubmit={handleSubmit}>
-        <h3 className="font-bold">{editingId ? 'Rediger rett' : 'Opprett rett'}</h3>
-        <label className="grid gap-1 text-sm">
-          Navn
+  return (
+    <section className="dishes-admin">
+      <header className="admin-page-heading">
+        <div>
+          <h1>Retter</h1>
+          <p>Opprett og administrer matrettene i kantineportalen</p>
+        </div>
+        {!editingId ? (
+          <button className="admin-primary-button" onClick={resetForm} type="button">
+            <Plus aria-hidden="true" size={18} />
+            Ny rett
+          </button>
+        ) : null}
+      </header>
+
+      {error ? (
+        <p className="admin-alert is-error" role="alert">
+          {error}
+        </p>
+      ) : null}
+      {success ? (
+        <p aria-live="polite" className="admin-alert is-success">
+          {success}
+        </p>
+      ) : null}
+
+      <div className="dishes-admin-layout">
+        <form className="dish-editor" encType="multipart/form-data" onSubmit={handleSubmit}>
+          <div className="dish-editor-heading">
+            <div>
+              <span className="admin-eyebrow">{editingId ? 'Redigering' : 'Ny matrett'}</span>
+              <h2>{editingId ? editingDish?.name || 'Rediger rett' : 'Opprett rett'}</h2>
+            </div>
+            {editingId ? (
+              <button aria-label="Avbryt redigering" className="admin-icon-button" onClick={resetForm} type="button">
+                <X aria-hidden="true" size={18} />
+              </button>
+            ) : null}
+          </div>
+
+          <label className="admin-field">
+            <span>Navn på retten</span>
           <input
-            className="border px-2 py-2"
             onChange={(event) => setForm({ ...form, name: event.target.value })}
+            placeholder="For eksempel lasagne med salat"
             required
             value={form.name}
           />
         </label>
-        <label className="grid gap-1 text-sm">
-          Beskrivelse
+          <label className="admin-field">
+            <span>Beskrivelse</span>
           <textarea
-            className="border px-2 py-2"
             onChange={(event) => setForm({ ...form, description: event.target.value })}
+            placeholder="Kort beskrivelse av retten"
+            rows={3}
             value={form.description}
           />
         </label>
 
-        <div className="grid gap-2 border p-3 text-sm">
-          <label className="grid gap-1">
-            Bilde
-            <span className="text-xs text-slate-600">Tillatt: jpg, jpeg, png, webp. Maks 5 MB.</span>
+          <div className="dish-image-field">
+            <div className="dish-field-heading">
+              <div>
+                <strong>Bilde</strong>
+                <span>JPG, PNG eller WEBP. Maks 5 MB.</span>
+              </div>
+              {form.imageFile ? (
+                <button className="admin-text-button" onClick={clearSelectedImage} type="button">
+                  Fjern valgt bilde
+                </button>
+              ) : null}
+            </div>
+
+            <label className={savedImagePreviewUrl ? 'dish-image-dropzone has-image' : 'dish-image-dropzone'}>
             <input
               accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-              className="border px-2 py-2"
               onChange={handleImageChange}
               ref={fileInputRef}
               required={!editingId}
               type="file"
             />
-          </label>
+              {savedImagePreviewUrl ? (
+                <img alt={`Forhåndsvisning for ${form.name || 'ny rett'}`} src={savedImagePreviewUrl} />
+              ) : (
+                <>
+                  <span className="dish-image-dropzone-icon">
+                    <ImagePlus aria-hidden="true" size={23} />
+                  </span>
+                  <strong>Velg bilde</strong>
+                  <span>Klikk for å laste opp</span>
+                </>
+              )}
+            </label>
 
-          {imageError ? <p className="text-sm font-semibold text-red-700">{imageError}</p> : null}
-
-          <div className="grid gap-1 text-xs text-slate-700">
-            <p>
-              <strong>Valgt fil:</strong> {selectedFileName || 'Ingen ny fil valgt'}
-              {form.imageFile ? ` (${formatFileSize(form.imageFile.size)})` : ''}
-            </p>
-            {editingDish?.image ? (
-              <p className="break-all">
-                <strong>Eksisterende bilde:</strong> {editingDish.image}
+            {imageError ? (
+              <p className="admin-field-error" role="alert">
+                {imageError}
               </p>
             ) : null}
-            <p>
-              <strong>Status:</strong> {imageStatus}
+
+            <p className="dish-image-status">
+              <strong>{selectedFileName || (editingDish?.image ? 'Eksisterende bilde' : 'Ingen fil valgt')}</strong>
+              {form.imageFile ? ` (${formatFileSize(form.imageFile.size)})` : ''}
+              <span>{imageStatus}</span>
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            {existingImageUrl ? (
-              <div className="grid gap-1">
-                <p className="text-xs font-bold uppercase text-slate-600">Bilde som ligger på retten nå</p>
-                <img
-                  alt={`Eksisterende bilde for ${editingDish?.name || form.name}`}
-                  className="h-36 w-full rounded border object-cover"
-                  src={existingImageUrl}
-                />
-              </div>
-            ) : null}
-
-            <div className="grid gap-1">
-              <p className="text-xs font-bold uppercase text-slate-600">Bilde som blir lagret</p>
-              {savedImagePreviewUrl ? (
-                <img
-                  alt={`Preview for ${form.name || 'ny rett'}`}
-                  className="h-36 w-full rounded border object-cover"
-                  src={savedImagePreviewUrl}
-                />
-              ) : (
-                <div className="grid h-36 place-items-center rounded border bg-slate-50 text-xs text-slate-500">
-                  Ingen bilde valgt
-                </div>
-              )}
-            </div>
-          </div>
-
-          {form.imageFile ? (
-            <button className="w-fit border px-3 py-1 text-sm" onClick={clearSelectedImage} type="button">
-              Fjern valgt bilde
-            </button>
-          ) : null}
-        </div>
-
-        <fieldset className="border p-2">
-          <legend className="text-sm font-bold">Allergener</legend>
-          {allergens.length === 0 ? <p className="text-sm">Ingen allergier registrert.</p> : null}
-          <div className="grid gap-1">
+          <fieldset className="dish-options">
+            <legend>Allergener</legend>
+            {allergens.length === 0 ? <p>Ingen allergier registrert.</p> : null}
+            <div className="dish-option-grid">
             {allergens.map((allergen) => (
-              <label className="flex gap-2 text-sm" key={allergen._id}>
+                <label className="dish-option" key={allergen._id}>
                 <input
                   checked={form.allergens.includes(allergen._id)}
                   onChange={() => toggleAllergen(allergen._id)}
                   type="checkbox"
                 />
-                {allergen.name}
+                  <span>{allergen.name}</span>
               </label>
             ))}
           </div>
         </fieldset>
-        <div className="flex gap-2">
-          <button className="border px-3 py-2" disabled={isSaving || Boolean(imageError)} type="submit">
+
+          <fieldset className="dish-options">
+            <legend>Kostholdsmerker</legend>
+            <p>Velg ett eller flere merker dersom retten passer bestemte kosthold.</p>
+            <div className="dish-option-grid">
+              {dietaryTagOptions.map((option) => {
+                const OptionIcon = dietaryTagIcon(option.value)
+
+                return (
+                  <label className="dish-option" key={option.value}>
+                    <input
+                      checked={form.dietaryTags.includes(option.value)}
+                      onChange={() => toggleDietaryTag(option.value)}
+                      type="checkbox"
+                    />
+                    <OptionIcon aria-hidden="true" size={17} />
+                    <span>{option.label}</span>
+                  </label>
+                )
+              })}
+          </div>
+        </fieldset>
+
+          <div className="dish-editor-actions">
+            <button className="admin-primary-button" disabled={isSaving || Boolean(imageError)} type="submit">
             {isSaving ? 'Lagrer...' : editingId ? 'Lagre endring' : 'Opprett rett'}
           </button>
           {editingId ? (
-            <button className="border px-3 py-2" onClick={resetForm} type="button">
+              <button className="admin-secondary-button" onClick={resetForm} type="button">
               Avbryt
             </button>
           ) : null}
         </div>
       </form>
 
-      {isLoading ? <p>Laster retter...</p> : null}
-      <ul className="grid gap-2">
-        {dishes.map((dish) => (
-          <li className="grid gap-3 border p-3 sm:grid-cols-[120px_1fr]" key={dish._id}>
-            {dish.image ? (
-              <img alt={dish.name} className="h-24 w-28 rounded object-cover" src={getAssetUrl(dish.image)} />
-            ) : (
-              <div className="grid h-24 w-28 place-items-center rounded bg-slate-100 text-xs text-slate-600">Mangler bilde</div>
-            )}
+        <div className="dish-library">
+          <div className="dish-library-heading">
             <div>
-              <h3 className="font-bold">{dish.name}</h3>
-              {dish.description ? <p className="text-sm">{dish.description}</p> : null}
-              <p className="break-all text-xs text-slate-600">Bilde: {dish.image || 'Mangler'}</p>
-              {dish.allergens?.length ? (
-                <p className="text-sm">Allergener: {dish.allergens.map((allergen) => allergen.name).join(', ')}</p>
-              ) : (
-                <p className="text-sm">Ingen allergener</p>
-              )}
-              <div className="mt-2 flex gap-2">
-                <button className="border px-3 py-1 text-sm" onClick={() => startEdit(dish)} type="button">
-                  Rediger
+              <span className="admin-eyebrow">Menybibliotek</span>
+              <h2>Eksisterende retter</h2>
+            </div>
+            <span className="dish-count">{dishes.length} retter</span>
+          </div>
+
+          {isLoading ? <p className="admin-empty-state">Laster retter...</p> : null}
+          {!isLoading && dishes.length === 0 ? <p className="admin-empty-state">Ingen retter er opprettet ennå.</p> : null}
+
+          <ul className="dish-card-grid">
+        {dishes.map((dish) => (
+              <li className="dish-card" key={dish._id}>
+            {dish.image ? (
+                  <img alt={dish.name} className="dish-card-image" src={getAssetUrl(dish.image)} />
+            ) : (
+                  <div className="dish-card-image dish-card-image-placeholder">
+                    <ImagePlus aria-hidden="true" size={25} />
+                    Mangler bilde
+                  </div>
+            )}
+                <div className="dish-card-body">
+                  <h3>{dish.name}</h3>
+                  <p className="dish-card-description">{dish.description || 'Ingen beskrivelse lagt til.'}</p>
+
+                  <div className="dish-card-tags">
+                    {dish.dietaryTags?.map((tag) => {
+                      const TagIcon = dietaryTagIcon(tag)
+                      return (
+                        <span key={tag}>
+                          <TagIcon aria-hidden="true" size={13} />
+                          {dietaryTagLabel(tag)}
+                        </span>
+                      )
+                    })}
+                    {dish.allergens?.map((allergen) => <span key={allergen._id}>{allergen.name}</span>)}
+                    {!dish.dietaryTags?.length && !dish.allergens?.length ? <span>Ingen merker</span> : null}
+                  </div>
+
+                  <div className="dish-card-actions">
+                    <button className="admin-secondary-button" onClick={() => startEdit(dish)} type="button">
+                      <Pencil aria-hidden="true" size={15} />
+                      Rediger
                 </button>
-                <button className="border px-3 py-1 text-sm" onClick={() => void handleDelete(dish._id)} type="button">
+                    <button className="admin-danger-button" onClick={() => void handleDelete(dish._id)} type="button">
+                      <Trash2 aria-hidden="true" size={15} />
                   Slett
                 </button>
               </div>
@@ -394,6 +486,8 @@ export function DishesPage() {
           </li>
         ))}
       </ul>
+        </div>
+      </div>
     </section>
   )
 }

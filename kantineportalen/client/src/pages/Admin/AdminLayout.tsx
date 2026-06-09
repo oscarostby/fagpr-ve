@@ -1,16 +1,32 @@
+import { CookingPot, House, LogOut, Menu, Sprout, X } from 'lucide-react'
+import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 
+import vaarLogo from '@/assets/images/logovaar1.png'
 import { useAuth } from '@/auth/AuthContext'
+import './admin.css'
 
 const navItems = [
-  { to: '/admin', label: 'Hjem', end: true },
-  { to: '/admin/retter', label: 'Retter' },
-  { to: '/admin/allergier', label: 'Allergier' },
+  { to: '/admin', label: 'Hjem', end: true, icon: House },
+  { to: '/admin/retter', label: 'Retter', icon: CookingPot },
+  { to: '/admin/allergier', label: 'Allergier', icon: Sprout },
 ]
 
+function Brand() {
+  return (
+    <div className="admin-brand" aria-label="Kantineportalen">
+      <span className="admin-brand-logo-crop" aria-hidden="true">
+        <img className="admin-brand-logo" src={vaarLogo} alt="" />
+      </span>
+      <span className="admin-brand-name">Kantineportalen</span>
+    </div>
+  )
+}
+
 export function AdminLayout() {
-  const { logout, username } = useAuth()
+  const { logout } = useAuth()
   const navigate = useNavigate()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   function handleLogout() {
     logout()
@@ -18,29 +34,69 @@ export function AdminLayout() {
   }
 
   return (
-    <main className="min-h-screen bg-white p-4 text-slate-900">
-      <header className="mb-4 border-b pb-3">
-        <h1 className="text-xl font-bold">Admin</h1>
-        <p className="text-sm">Innlogget{username ? ` som ${username}` : ''}</p>
-        <nav className="mt-3 flex flex-wrap gap-2">
-          {navItems.map((item) => (
-            <NavLink
-              className={({ isActive }) =>
-                `border px-3 py-2 text-sm ${isActive ? 'bg-slate-200' : 'bg-white'}`
-              }
-              end={item.end}
-              key={item.to}
-              to={item.to}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-          <button className="border px-3 py-2 text-sm" onClick={handleLogout} type="button">
-            Logg ut
+    <main className="admin-shell">
+      <aside className={isMenuOpen ? 'admin-sidebar is-open' : 'admin-sidebar'}>
+        <div className="admin-sidebar-header">
+          <Brand />
+          <button
+            aria-label="Lukk meny"
+            className="admin-mobile-menu-button"
+            onClick={() => setIsMenuOpen(false)}
+            type="button"
+          >
+            <X size={22} strokeWidth={1.8} />
           </button>
+        </div>
+
+        <nav className="admin-nav" aria-label="Adminmeny">
+          {navItems.map((item) => {
+            const Icon = item.icon
+
+            return (
+              <NavLink
+                className={({ isActive }) => `admin-nav-link${isActive ? ' is-active' : ''}`}
+                end={item.end}
+                key={item.to}
+                onClick={() => setIsMenuOpen(false)}
+                to={item.to}
+              >
+                <Icon aria-hidden="true" size={20} strokeWidth={1.7} />
+                <span>{item.label}</span>
+              </NavLink>
+            )
+          })}
         </nav>
+
+        <button className="admin-logout" onClick={handleLogout} type="button">
+          <LogOut aria-hidden="true" size={20} strokeWidth={1.7} />
+          <span>Logg ut</span>
+        </button>
+      </aside>
+
+      <header className="admin-mobile-header">
+        <Brand />
+        <button
+          aria-label="Åpne meny"
+          className="admin-mobile-menu-button"
+          onClick={() => setIsMenuOpen(true)}
+          type="button"
+        >
+          <Menu size={23} strokeWidth={1.8} />
+        </button>
       </header>
-      <Outlet />
+
+      {isMenuOpen ? (
+        <button
+          aria-label="Lukk meny"
+          className="admin-sidebar-backdrop"
+          onClick={() => setIsMenuOpen(false)}
+          type="button"
+        />
+      ) : null}
+
+      <div className="admin-content">
+        <Outlet />
+      </div>
     </main>
   )
 }

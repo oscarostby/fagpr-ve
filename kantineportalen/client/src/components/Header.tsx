@@ -4,8 +4,16 @@ import vaarLogo from '@/assets/images/logovaar1.png'
 
 const SiteHeader = styled.header.attrs({
   className:
-    'relative h-[112px] shrink-0 overflow-hidden bg-[#1b332e] text-white',
-})``
+    'relative h-[92px] shrink-0 overflow-hidden bg-[#1b332e] text-white',
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    height: 88px;
+  }
+
+  @media (max-width: 1024px) {
+    height: 82px;
+  }
+`
 
 const HeaderGradient = styled.div.attrs({
   className:
@@ -29,22 +37,55 @@ const LightBandFill = styled.div.attrs({
 const HomeLink = styled.a.attrs({
   className:
     'relative z-10 flex h-full items-center gap-4 pl-[30px] md:gap-5 md:pl-[42px]',
-})``
+})`
+  @media (max-width: 1024px) {
+    gap: 12px;
+    padding-left: 24px;
+  }
+`
 
 const LogoCrop = styled.span.attrs({
   className:
     'relative block h-[60px] w-[58px] shrink-0 overflow-hidden',
-})``
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    height: 50px;
+    width: 48px;
+  }
+
+  @media (max-width: 1024px) {
+    height: 48px;
+    width: 46px;
+  }
+`
 
 const LogoImage = styled.img.attrs({
   className:
     'absolute left-[-58px] top-[-20px] h-[110px] w-[165px] max-w-none object-contain brightness-[0.98] saturate-[0.82] contrast-[1.05]',
-})``
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    left: -48px;
+    top: -17px;
+    height: 92px;
+    width: 138px;
+  }
+
+  @media (max-width: 1024px) {
+    left: -46px;
+    top: -16px;
+    height: 88px;
+    width: 132px;
+  }
+`
 
 const BrandName = styled.span.attrs({
   className:
     'text-[18px] font-extrabold leading-none tracking-[-0.04em] text-[#f5f6f2] md:text-[24px]',
-})``
+})`
+  @media (max-width: 1024px) {
+    font-size: 18px;
+  }
+`
 
 export function Header() {
   return (

@@ -11,8 +11,16 @@ const LeafImage = styled.img.attrs({
 })``
 
 const SiteFooter = styled.footer.attrs({
-  className: 'relative mt-8 h-[122px] shrink-0 overflow-hidden bg-[#f1f4ec] md:mt-0 md:h-[125px]',
-})``
+  className: 'relative mt-6 h-[105px] shrink-0 overflow-hidden bg-[#f1f4ec] md:mt-0 md:h-[105px]',
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    height: 104px;
+  }
+
+  @media (max-width: 1024px) {
+    height: 112px;
+  }
+`
 
 const BottomRule = styled.div.attrs({
   className: 'absolute bottom-0 left-0 h-[4px] w-full bg-[#2c8335]',
@@ -31,15 +39,15 @@ const ContactAddress = styled.address.attrs({
 })``
 
 const ContactHeading = styled.p.attrs({
-  className: 'text-[13px] font-extrabold uppercase leading-none text-[#2c8335] md:text-[14px]',
+  className: 'text-[16px] font-extrabold uppercase leading-tight text-[#276f30]',
 })``
 
 const EmailLink = styled.a.attrs({
-  className: 'mt-4 block text-[14px] font-semibold tracking-[-0.02em] hover:underline md:text-[15px]',
+  className: 'mt-4 block min-h-11 py-2 text-[16px] font-semibold tracking-[-0.02em] hover:underline',
 })``
 
 const PhoneLink = styled.a.attrs({
-  className: 'mt-2 block text-[14px] font-semibold tracking-[-0.02em] hover:underline md:text-[15px]',
+  className: 'block min-h-11 py-2 text-[16px] font-semibold tracking-[-0.02em] hover:underline',
 })``
 
 function LeafGraphic() {

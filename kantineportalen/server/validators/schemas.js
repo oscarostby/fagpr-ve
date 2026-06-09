@@ -20,6 +20,11 @@ const objectId = z
   .trim()
   .refine((value) => mongoose.Types.ObjectId.isValid(value), 'Ugyldig ObjectId')
 
+const dietaryTag = z.enum(['vegetarian', 'vegan', 'halal', 'kosher'], {
+  invalid_type_error: 'Kostholdsmerke må være tekst',
+  errorMap: () => ({ message: 'Ugyldig kostholdsmerke' }),
+})
+
 const optionalObjectIdOrNull = z
   .union([objectId, z.null(), z.literal('')])
   .optional()
@@ -49,6 +54,7 @@ export const dishSchema = z.object({
       description: optionalString('Beskrivelse', 1000),
       image: optionalString('Bilde', 500),
       allergens: z.array(objectId, { invalid_type_error: 'Allergener må være en liste' }).optional(),
+      dietaryTags: z.array(dietaryTag, { invalid_type_error: 'Kostholdsmerker må være en liste' }).optional(),
     })
     .strict(),
   params: z.unknown().optional(),

@@ -98,6 +98,12 @@ export const swaggerSpec = swaggerJsdoc({
               type: 'array',
               items: { $ref: '#/components/schemas/Allergen' },
             },
+            dietaryTags: {
+              type: 'array',
+              description: 'Kostholdsmerker som beskriver om retten passer bestemte kosthold.',
+              items: { type: 'string', enum: ['vegetarian', 'vegan', 'halal', 'kosher'] },
+              example: ['vegetarian', 'halal'],
+            },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' },
           },
@@ -115,6 +121,13 @@ export const swaggerSpec = swaggerJsdoc({
                 { type: 'array', items: { type: 'string' } },
               ],
             },
+            dietaryTags: {
+              description: 'JSON-array, kommaseparert streng eller gjentatte felt med vegetarian, vegan, halal eller kosher.',
+              oneOf: [
+                { type: 'string', example: '["vegetarian","halal"]' },
+                { type: 'array', items: { type: 'string', enum: ['vegetarian', 'vegan', 'halal', 'kosher'] } },
+              ],
+            },
             image: { type: 'string', format: 'binary' },
           },
         },
@@ -129,6 +142,13 @@ export const swaggerSpec = swaggerJsdoc({
               oneOf: [
                 { type: 'string', example: '[]' },
                 { type: 'array', items: { type: 'string' } },
+              ],
+            },
+            dietaryTags: {
+              description: 'JSON-array, kommaseparert streng eller gjentatte felt med vegetarian, vegan, halal eller kosher.',
+              oneOf: [
+                { type: 'string', example: 'vegan,kosher' },
+                { type: 'array', items: { type: 'string', enum: ['vegetarian', 'vegan', 'halal', 'kosher'] } },
               ],
             },
             image: { type: 'string', format: 'binary' },

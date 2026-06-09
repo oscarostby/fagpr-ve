@@ -1,5 +1,6 @@
 import type { Lunch, Weekday, WeeklyMenuItem } from '@/types/menu'
 import { apiRequest, getAssetUrl } from '@/services/api'
+import type { DietaryTag } from '@/utils/dietaryTags'
 
 type ApiAllergen = {
   _id: string
@@ -12,6 +13,7 @@ type ApiDish = {
   description: string
   image: string
   allergens: ApiAllergen[]
+  dietaryTags: DietaryTag[]
 }
 
 type ApiWeeklyMenu = {
@@ -42,6 +44,10 @@ function allergenNames(dish: ApiDish | null | undefined) {
   return dish?.allergens?.map((allergen) => allergen.name) ?? []
 }
 
+function dietaryTags(dish: ApiDish | null | undefined) {
+  return dish?.dietaryTags ?? []
+}
+
 function dishTitle(dish: ApiDish | null | undefined) {
   return dish?.name || 'Ingen rett satt opp'
 }
@@ -64,11 +70,14 @@ export async function getFrontendMenu(): Promise<FrontendMenu> {
       title: dishTitle(todayDish),
       servingTime: '11:00 - 13:00',
       allergens: allergenNames(todayDish),
+      dietaryTags: dietaryTags(todayDish),
       image: dishImage(todayDish),
     },
     weeklyMenu: dayConfig.map(({ apiKey, day }) => ({
       day,
       title: dishTitle(apiMenu[apiKey]),
+      allergens: allergenNames(apiMenu[apiKey]),
+      dietaryTags: dietaryTags(apiMenu[apiKey]),
     })),
   }
 }

@@ -44,6 +44,10 @@ export const GlobalStyles = createGlobalStyle`
     border-color: var(--border);
   }
 
+  html {
+    font-size: 16px;
+  }
+
   body {
     margin: 0;
     min-width: 320px;
@@ -51,9 +55,30 @@ export const GlobalStyles = createGlobalStyle`
     background: #f5f5f3;
     color: var(--foreground);
     font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.5;
   }
 
   #root {
     min-height: 100vh;
+  }
+
+  :where(a, button, input, textarea, select):focus-visible {
+    outline: 3px solid #2c8335;
+    outline-offset: 3px;
+  }
+
+  :where(button, input, textarea, select) {
+    font: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
   }
 `

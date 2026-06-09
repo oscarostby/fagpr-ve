@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { Clock } from 'lucide-react'
 
 import type { Lunch } from '@/types/menu'
+import { dietaryTagIcon, dietaryTagLabel } from '@/utils/dietaryTags'
 
 type LunchCardProps = {
   lunch: Lunch
@@ -9,32 +10,79 @@ type LunchCardProps = {
 
 const LunchSection = styled.section.attrs({
   className:
-    'mt-10 grid items-start gap-5 md:mt-8 md:grid-cols-[minmax(300px,0.4fr)_minmax(0,0.6fr)] md:gap-[62px] xl:mt-16 xl:gap-[72px]',
-})``
+    'mt-7 grid items-start gap-5 md:mt-5 md:grid-cols-[minmax(280px,0.4fr)_minmax(0,0.6fr)] md:gap-[48px] xl:mt-7 xl:gap-[56px]',
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    margin-top: 18px;
+    gap: 44px;
+  }
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 24px;
+  }
+`
 
 const TextColumn = styled.div.attrs({
-  className: 'md:pt-[34px] xl:pt-[40px]',
-})``
+  className: 'md:pt-[18px] xl:pt-[22px]',
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    padding-top: 14px;
+  }
+
+  @media (max-width: 1024px) {
+    padding-top: 0;
+  }
+`
 
 const Eyebrow = styled.p.attrs({
   className:
-    'mb-3 text-[12px] font-extrabold uppercase leading-none tracking-[-0.015em] text-[#2c8335] md:mb-4 md:text-[14px]',
+    'mb-3 text-[16px] font-extrabold uppercase leading-tight tracking-[-0.015em] text-[#276f30] md:mb-4',
 })``
 
 const Heading = styled.h1.attrs({
   className:
-    'text-[32px] font-black leading-[0.95] tracking-[-0.045em] text-[#003f35] sm:text-[38px] md:whitespace-nowrap md:text-[44px] xl:text-[48px]',
-})``
+    'text-[30px] font-black leading-[0.95] tracking-[-0.045em] text-[#003f35] sm:text-[34px] md:whitespace-nowrap md:text-[38px] xl:text-[42px]',
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    font-size: 38px;
+  }
+
+  @media (max-width: 1024px) {
+    font-size: clamp(30px, 6vw, 38px);
+  }
+`
 
 const DishName = styled.p.attrs({
   className:
-    'mt-4 text-[21px] font-medium leading-none tracking-[-0.04em] text-[#003f35] md:mt-6 md:text-[26px] xl:text-[29px]',
-})``
+    'mt-3 text-[19px] font-medium leading-none tracking-[-0.04em] text-[#003f35] md:mt-4 md:text-[22px] xl:text-[24px]',
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    margin-top: 14px;
+    font-size: 22px;
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 12px;
+    font-size: 20px;
+  }
+`
 
 const Divider = styled.div.attrs({
   className:
     'my-5 h-[2px] w-[46px] bg-[#2c8335] md:my-5 md:w-[56px]',
-})``
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    margin-top: 14px;
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+`
 
 const TimeRow = styled.div.attrs({
   className:
@@ -47,28 +95,62 @@ const StyledClock = styled(Clock).attrs({
 })``
 
 const Allergens = styled.div.attrs({
-  className: 'mt-6 md:mt-7',
-})``
+  className: 'mt-4 md:mt-5',
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    margin-top: 16px;
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 14px;
+  }
+`
 
 const AllergensLabel = styled.p.attrs({
   className:
-    'text-[12px] font-extrabold uppercase leading-none text-[#2c8335] md:text-[11px]',
+    'text-[16px] font-extrabold uppercase leading-tight text-[#276f30]',
 })``
 
 const AllergensText = styled.p.attrs({
   className:
-    'mt-2 text-[16px] font-medium leading-none tracking-[-0.02em] text-[#003f35] md:mt-2 md:text-[14px]',
+    'mt-2 text-[16px] font-medium leading-normal tracking-[-0.02em] text-[#003f35]',
+})``
+
+const Badges = styled.div.attrs({
+  className: 'mt-3 flex flex-wrap gap-1.5',
+})``
+
+const Badge = styled.span.attrs({
+  className: 'rounded-full border border-[#5c9662] bg-[#edf7ec] px-3 py-1.5 text-[14px] font-bold text-[#195c29]',
 })``
 
 const LunchImage = styled.img.attrs({
   className:
-    'h-[170px] w-full rounded-[8px] object-cover object-center shadow-[0_12px_32px_rgba(20,35,28,0.12)] md:mt-[4px] md:h-[280px] md:w-full md:justify-self-end xl:h-[310px]',
-})``
+    'h-[160px] w-full rounded-[8px] object-cover object-center shadow-[0_12px_32px_rgba(20,35,28,0.12)] md:mt-[4px] md:h-[225px] md:w-full md:justify-self-end xl:h-[245px]',
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    height: 220px;
+  }
+
+  @media (max-width: 1024px) {
+    height: clamp(150px, 32vw, 210px);
+    margin-top: 0;
+  }
+`
 
 const MissingImage = styled.div.attrs({
   className:
-    'grid h-[170px] w-full place-items-center rounded-[8px] bg-[#f4f6f2] text-sm font-semibold text-[#003f35] shadow-[0_12px_32px_rgba(20,35,28,0.08)] md:mt-[4px] md:h-[280px] xl:h-[310px]',
-})``
+    'grid h-[160px] w-full place-items-center rounded-[8px] bg-[#f4f6f2] text-sm font-semibold text-[#003f35] shadow-[0_12px_32px_rgba(20,35,28,0.08)] md:mt-[4px] md:h-[225px] xl:h-[245px]',
+})`
+  @media (min-width: 768px) and (max-height: 850px) {
+    height: 220px;
+  }
+
+  @media (max-width: 1024px) {
+    height: clamp(150px, 32vw, 210px);
+    margin-top: 0;
+  }
+`
 
 export function LunchCard({ lunch }: LunchCardProps) {
   return (
@@ -89,8 +171,32 @@ export function LunchCard({ lunch }: LunchCardProps) {
 
         <Allergens>
           <AllergensLabel>Allergener</AllergensLabel>
-          <AllergensText>{lunch.allergens.length ? lunch.allergens.join(', ') : 'Ingen registrerte allergener'}</AllergensText>
+          {lunch.allergens.length ? (
+            <Badges aria-label="Allergener">
+              {lunch.allergens.map((allergen) => (
+                <Badge key={allergen}>{allergen}</Badge>
+              ))}
+            </Badges>
+          ) : (
+            <AllergensText>Ingen registrerte allergener</AllergensText>
+          )}
         </Allergens>
+
+        {lunch.dietaryTags.length ? (
+          <Badges aria-label="Kostholdsmerker">
+            {lunch.dietaryTags.map((tag) => {
+              const TagIcon = dietaryTagIcon(tag)
+              const label = dietaryTagLabel(tag)
+
+              return (
+                <Badge aria-label={label} key={tag} role="img" title={label}>
+                  <TagIcon aria-hidden="true" size={16} />
+                  {label}
+                </Badge>
+              )
+            })}
+          </Badges>
+        ) : null}
       </TextColumn>
 
       {lunch.image ? <LunchImage src={lunch.image} alt={lunch.title} /> : <MissingImage>Ingen bilde valgt</MissingImage>}

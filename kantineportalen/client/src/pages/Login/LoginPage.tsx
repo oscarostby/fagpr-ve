@@ -1,8 +1,11 @@
+import { ArrowRight, LockKeyhole, UserRound } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 
+import vaarLogo from '@/assets/images/logovaar1.png'
 import { useAuth } from '@/auth/AuthContext'
 import { ApiError } from '@/services/api'
+import '@/pages/Admin/admin.css'
 
 export function LoginPage() {
   const { isAuthenticated, isAdmin, login } = useAuth()
@@ -41,39 +44,76 @@ export function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white p-4 text-slate-900">
-      <section className="mx-auto max-w-sm border p-4">
-        <h1 className="text-xl font-bold">Logg inn</h1>
-        <form className="mt-4 grid gap-3" onSubmit={handleSubmit}>
-          <label className="grid gap-1 text-sm">
-            Brukernavn
+    <main className="login-page">
+      <section className="login-brand-panel">
+        <div className="login-brand">
+          <span className="login-brand-logo-crop" aria-hidden="true">
+            <img alt="" className="login-brand-logo" src={vaarLogo} />
+          </span>
+          <span>Kantineportalen</span>
+        </div>
+
+        <div className="login-brand-copy">
+          <span className="admin-eyebrow">Administrasjon</span>
+          <h1>Ukens meny, samlet på ett sted.</h1>
+          <p>Administrer retter, allergener og ukemenyen på en enkel og oversiktlig måte.</p>
+        </div>
+
+        <p className="login-brand-footer">Kantineportalen</p>
+      </section>
+
+      <section className="login-form-panel">
+        <div className="login-card">
+          <header className="login-heading">
+            <span className="admin-eyebrow">Velkommen tilbake</span>
+            <h2>Logg inn</h2>
+            <p>Bruk adminkontoen din for å fortsette.</p>
+          </header>
+
+          <form className="login-form" onSubmit={handleSubmit}>
+            <label className="login-field">
+              <span>Brukernavn</span>
+              <span className="login-input-wrap">
+                <UserRound aria-hidden="true" size={18} />
             <input
               autoComplete="username"
-              className="border px-2 py-2"
               name="username"
               onChange={(event) => setUsername(event.target.value)}
+                  placeholder="Skriv inn brukernavn"
               required
               type="text"
               value={username}
             />
+              </span>
           </label>
-          <label className="grid gap-1 text-sm">
-            Passord
+            <label className="login-field">
+              <span>Passord</span>
+              <span className="login-input-wrap">
+                <LockKeyhole aria-hidden="true" size={18} />
             <input
               autoComplete="current-password"
-              className="border px-2 py-2"
               name="password"
               onChange={(event) => setPassword(event.target.value)}
+                  placeholder="Skriv inn passord"
               required
               type="password"
               value={password}
             />
+              </span>
           </label>
-          {error ? <p className="text-sm text-red-700">{error}</p> : null}
-          <button className="border px-3 py-2" disabled={isLoading} type="submit">
-            {isLoading ? 'Logger inn...' : 'Logg inn'}
+
+            {error ? (
+              <p className="login-error" role="alert">
+                {error}
+              </p>
+            ) : null}
+
+            <button aria-busy={isLoading} className="login-submit" disabled={isLoading} type="submit">
+              <span>{isLoading ? 'Logger inn...' : 'Logg inn'}</span>
+              <ArrowRight aria-hidden="true" size={18} />
           </button>
         </form>
+        </div>
       </section>
     </main>
   )

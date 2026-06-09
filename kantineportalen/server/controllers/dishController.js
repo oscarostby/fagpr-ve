@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 
 import { Dish } from '../models/Dish.js'
 import { deleteDishImage, uploadedDishImagePath } from '../utils/dishImageStorage.js'
+import { parseDietaryTags } from '../utils/dietaryTags.js'
 
 function populateAllergens(query) {
   return query.populate('allergens', 'name')
@@ -40,6 +41,7 @@ function validateDishFields(body, { requireImage, file }) {
   const name = String(body.name || '').trim()
   const description = String(body.description || '').trim()
   const allergens = parseAllergens(body.allergens)
+  const dietaryTags = parseDietaryTags(body.dietaryTags)
   const image = uploadedDishImagePath(file)
 
   if (!name) {
@@ -64,7 +66,7 @@ function validateDishFields(body, { requireImage, file }) {
     throw Object.assign(new Error('Bilde er påkrevd'), { statusCode: 400 })
   }
 
-  return { name, description, image, allergens }
+  return { name, description, image, allergens, dietaryTags }
 }
 
 async function deleteUploadedFileOnError(file) {
@@ -106,6 +108,7 @@ export async function createDish(req, res, next) {
       description: payload.description,
       image: payload.image,
       allergens: payload.allergens,
+      dietaryTags: payload.dietaryTags,
     })
 
     const populatedDish = await populateAllergens(Dish.findById(dish._id))
@@ -131,6 +134,7 @@ export async function updateDish(req, res, next) {
     existingDish.name = payload.name
     existingDish.description = payload.description
     existingDish.allergens = payload.allergens
+    existingDish.dietaryTags = payload.dietaryTags
     if (payload.image) {
       existingDish.image = payload.image
     }

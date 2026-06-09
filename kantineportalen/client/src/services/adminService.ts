@@ -1,4 +1,5 @@
 import { apiRequest } from '@/services/api'
+import type { DietaryTag } from '@/utils/dietaryTags'
 
 export type ApiAllergen = {
   _id: string
@@ -11,6 +12,7 @@ export type ApiDish = {
   description?: string
   image?: string
   allergens: ApiAllergen[]
+  dietaryTags: DietaryTag[]
 }
 
 export type ApiWeeklyMenu = {
@@ -36,6 +38,7 @@ export type DishPayload = {
   description?: string
   imageFile?: File | null
   allergens?: string[]
+  dietaryTags?: DietaryTag[]
 }
 
 function toDishFormData(payload: DishPayload) {
@@ -43,6 +46,7 @@ function toDishFormData(payload: DishPayload) {
   formData.append('name', payload.name)
   formData.append('description', payload.description || '')
   formData.append('allergens', JSON.stringify(payload.allergens || []))
+  formData.append('dietaryTags', JSON.stringify(payload.dietaryTags || []))
 
   if (payload.imageFile) {
     formData.append('image', payload.imageFile)
@@ -63,6 +67,10 @@ export type MenuPayload = {
   friday?: string | null
 }
 
+function normalizeDish(dish: ApiDish): ApiDish {
+  return { ...dish, allergens: dish.allergens || [], dietaryTags: dish.dietaryTags || [] }
+}
+
 export function login(username: string, password: string) {
   return apiRequest<LoginResponse>('/auth/login', {
     method: 'POST',
@@ -71,7 +79,7 @@ export function login(username: string, password: string) {
 }
 
 export function getDishes() {
-  return apiRequest<ApiDish[]>('/dishes')
+  return apiRequest<ApiDish[]>('/dishes').then((dishes) => dishes.map(normalizeDish))
 }
 
 export function getDish(id: string) {
@@ -83,7 +91,7 @@ export function createDish(payload: DishPayload, token: string) {
     method: 'POST',
     body: toDishFormData(payload),
     token,
-  })
+  }).then(normalizeDish)
 }
 
 export function updateDish(id: string, payload: DishPayload, token: string) {
@@ -91,7 +99,7 @@ export function updateDish(id: string, payload: DishPayload, token: string) {
     method: 'PUT',
     body: toDishFormData(payload),
     token,
-  })
+  }).then(normalizeDish)
 }
 
 export function deleteDish(id: string, token: string) {

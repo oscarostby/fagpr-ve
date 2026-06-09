@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import { Pencil, Plus, ShieldCheck, Trash2, X } from 'lucide-react'
 
 import { useAuth } from '@/auth/AuthContext'
 import {
@@ -92,53 +93,118 @@ export function AllergensPage() {
   }
 
   return (
-    <section>
-      <h2 className="text-lg font-bold">Allergier</h2>
-      {error ? <p className="my-2 text-sm text-red-700">{error}</p> : null}
+    <section className="allergens-admin">
+      <header className="admin-page-heading">
+        <div>
+          <h1>Allergier</h1>
+          <p>Administrer allergener som kan knyttes til matrettene</p>
+        </div>
+        <button className="admin-primary-button" onClick={resetForm} type="button">
+          <Plus aria-hidden="true" size={18} />
+          Ny allergi
+        </button>
+      </header>
 
-      <form className="my-4 flex max-w-xl flex-wrap gap-2 border p-3" onSubmit={handleSubmit}>
-        <label className="grid flex-1 gap-1 text-sm">
-          Navn
+      {error ? (
+        <p className="admin-alert is-error" role="alert">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="allergens-admin-layout">
+        <form className="allergen-editor" onSubmit={handleSubmit}>
+          <div className="dish-editor-heading">
+            <div>
+              <span className="admin-eyebrow">{editingId ? 'Redigering' : 'Ny allergi'}</span>
+              <h2>{editingId ? 'Rediger allergi' : 'Opprett allergi'}</h2>
+            </div>
+            {editingId ? (
+              <button aria-label="Avbryt redigering" className="admin-icon-button" onClick={resetForm} type="button">
+                <X aria-hidden="true" size={18} />
+              </button>
+            ) : null}
+          </div>
+
+          <div className="allergen-editor-icon">
+            <ShieldCheck aria-hidden="true" size={28} />
+          </div>
+
+          <label className="admin-field">
+            <span>Navn på allergien</span>
           <input
-            className="border px-2 py-2"
             onChange={(event) => setName(event.target.value)}
+            placeholder="For eksempel gluten eller melk"
             required
             value={name}
           />
         </label>
-        <button className="self-end border px-3 py-2" disabled={isSaving} type="submit">
-          {isSaving ? 'Lagrer...' : editingId ? 'Lagre endring' : 'Opprett allergi'}
-        </button>
-        {editingId ? (
-          <button className="self-end border px-3 py-2" onClick={resetForm} type="button">
-            Avbryt
-          </button>
-        ) : null}
-      </form>
 
-      {isLoading ? <p>Laster allergier...</p> : null}
-      <ul className="grid gap-2">
+          <p className="allergen-editor-help">
+            Allergien blir tilgjengelig som et valg når du oppretter eller redigerer en matrett.
+          </p>
+
+          <div className="dish-editor-actions">
+            <button className="admin-primary-button" disabled={isSaving} type="submit">
+              {isSaving ? 'Lagrer...' : editingId ? 'Lagre endring' : 'Opprett allergi'}
+          </button>
+            {editingId ? (
+              <button className="admin-secondary-button" onClick={resetForm} type="button">
+                Avbryt
+              </button>
+            ) : null}
+          </div>
+        </form>
+
+        <div className="allergen-library">
+          <div className="dish-library-heading">
+            <div>
+              <span className="admin-eyebrow">Allergibibliotek</span>
+              <h2>Registrerte allergier</h2>
+            </div>
+            <span className="dish-count">{allergens.length} allergier</span>
+          </div>
+
+          {isLoading ? <p className="admin-empty-state">Laster allergier...</p> : null}
+          {!isLoading && allergens.length === 0 ? (
+            <p className="admin-empty-state">Ingen allergier er registrert ennå.</p>
+          ) : null}
+
+          <ul className="allergen-card-grid">
         {allergens.map((allergen) => (
-          <li className="flex flex-wrap items-center justify-between gap-2 border p-3" key={allergen._id}>
-            <span>{allergen.name}</span>
-            <span className="flex gap-2">
-              <button
-                className="border px-3 py-1 text-sm"
-                onClick={() => {
-                  setEditingId(allergen._id)
-                  setName(allergen.name)
-                }}
-                type="button"
-              >
-                Rediger
-              </button>
-              <button className="border px-3 py-1 text-sm" onClick={() => void handleDelete(allergen._id)} type="button">
-                Slett
-              </button>
-            </span>
+              <li className="allergen-card" key={allergen._id}>
+                <div className="allergen-card-icon">
+                  <ShieldCheck aria-hidden="true" size={21} />
+                </div>
+                <div className="allergen-card-content">
+                  <h3>{allergen.name}</h3>
+                  <p>Kan legges til på relevante matretter.</p>
+                </div>
+                <div className="allergen-card-actions">
+                  <button
+                    aria-label={`Rediger ${allergen.name}`}
+                    className="admin-icon-button"
+                    onClick={() => {
+                      setEditingId(allergen._id)
+                      setName(allergen.name)
+                    }}
+                    type="button"
+                  >
+                    <Pencil aria-hidden="true" size={16} />
+                  </button>
+                  <button
+                    aria-label={`Slett ${allergen.name}`}
+                    className="admin-icon-button is-danger"
+                    onClick={() => void handleDelete(allergen._id)}
+                    type="button"
+                  >
+                    <Trash2 aria-hidden="true" size={16} />
+                  </button>
+                </div>
           </li>
         ))}
       </ul>
+        </div>
+      </div>
     </section>
   )
 }

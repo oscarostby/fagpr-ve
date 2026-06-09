@@ -45,26 +45,31 @@ const dishSeeds = [
     name: 'Lasagne med salat',
     description: 'Hjemmelaget lasagne servert med frisk salat.',
     allergens: ['Gluten', 'Melk', 'Egg'],
+    dietaryTags: ['vegetarian'],
   },
   {
     name: 'Kyllingwok med ris',
     description: 'Kyllingwok med grønnsaker og ris.',
     allergens: [],
+    dietaryTags: ['halal'],
   },
   {
     name: 'Fisk med poteter',
     description: 'Fisk servert med kokte poteter og grønnsaker.',
     allergens: ['Fisk', 'Melk'],
+    dietaryTags: ['kosher'],
   },
   {
     name: 'Pastasalat med skinke',
     description: 'Kald pastasalat med skinke og grønnsaker.',
     allergens: ['Gluten', 'Melk', 'Egg'],
+    dietaryTags: [],
   },
   {
     name: 'Pizza',
     description: 'Pizza med ost og tomatsaus.',
     allergens: ['Gluten', 'Melk'],
+    dietaryTags: ['vegetarian'],
   },
 ]
 
@@ -91,6 +96,7 @@ try {
         description: seed.description,
         image,
         allergens: seed.allergens.map((name) => allergenDocs[name]._id),
+        dietaryTags: seed.dietaryTags,
       },
       { upsert: true, new: true, setDefaultsOnInsert: true, runValidators: true },
     )
@@ -101,6 +107,11 @@ try {
   const migrationResult = await Dish.updateMany(
     { $or: [{ image: '' }, { image: { $exists: false } }, { image: null }] },
     { $set: { image: fallbackImage } },
+    { runValidators: true },
+  )
+  await Dish.updateMany(
+    { dietaryTags: { $exists: false } },
+    { $set: { dietaryTags: [] } },
     { runValidators: true },
   )
 
