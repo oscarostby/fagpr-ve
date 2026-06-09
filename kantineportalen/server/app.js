@@ -27,6 +27,11 @@ const allowedCorsOrigins = new Set([
 
 app.use(
   helmet({
+    contentSecurityPolicy: {
+      directives: {
+        'upgrade-insecure-requests': null,
+      },
+    },
     crossOriginResourcePolicy: { policy: 'cross-origin' },
   }),
 )
