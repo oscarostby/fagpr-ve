@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 import helmet from 'helmet'
 
+import { swaggerSpec, swaggerUiMiddleware } from './config/swagger.js'
 import allergenRoutes from './routes/allergenRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 import dishRoutes from './routes/dishRoutes.js'
@@ -49,6 +50,12 @@ app.use('/uploads', express.static(path.resolve(process.cwd(), 'server/uploads')
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' })
 })
+app.get('/api/swagger.json', (_req, res) => {
+  res.json(swaggerSpec)
+})
+app.use('/api/docs', swaggerUiMiddleware.serve, swaggerUiMiddleware.setup(swaggerSpec, {
+  customSiteTitle: 'Kantineportalen API docs',
+}))
 
 app.use('/api/auth', authRoutes)
 app.use('/api/dishes', dishRoutes)
