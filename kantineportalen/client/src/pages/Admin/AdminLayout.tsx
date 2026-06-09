@@ -6,6 +6,7 @@ const navItems = [
   { to: '/admin', label: 'Hjem', end: true },
   { to: '/admin/retter', label: 'Retter' },
   { to: '/admin/allergier', label: 'Allergier' },
+  { to: '/admin/token-expire', label: 'Token expire' },
 ]
 
 export function AdminLayout() {

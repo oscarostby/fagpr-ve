@@ -10,6 +10,7 @@ import allergenRoutes from './routes/allergenRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 import dishRoutes from './routes/dishRoutes.js'
 import menuRoutes from './routes/menuRoutes.js'
+import settingsRoutes from './routes/settingsRoutes.js'
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 
 // Ensure upload directory exists when app starts.
@@ -78,6 +79,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/dishes', dishRoutes)
 app.use('/api/allergens', allergenRoutes)
 app.use('/api/menu', menuRoutes)
+app.use('/api/settings', settingsRoutes)
 
 app.use(notFound)
 app.use(errorHandler)

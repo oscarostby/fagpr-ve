@@ -18,7 +18,7 @@ export async function login(req, res, next) {
       return res.status(401).json({ message: 'Feil brukernavn eller passord' })
     }
 
-    const token = createToken(user)
+    const token = await createToken(user)
 
     res.json({
       token,

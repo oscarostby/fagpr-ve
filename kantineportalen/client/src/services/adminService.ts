@@ -31,6 +31,12 @@ export type LoginResponse = {
   }
 }
 
+export type TokenExpirationSetting = {
+  expiresInSeconds: number
+  label: string
+  updatedAt?: string
+}
+
 export type DishPayload = {
   name: string
   description?: string
@@ -67,6 +73,18 @@ export function login(username: string, password: string) {
   return apiRequest<LoginResponse>('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ username, password }),
+  })
+}
+
+export function getTokenExpiration(token: string) {
+  return apiRequest<TokenExpirationSetting>('/settings/token-expiration', { token })
+}
+
+export function updateTokenExpiration(expiresInSeconds: number, token: string) {
+  return apiRequest<TokenExpirationSetting>('/settings/token-expiration', {
+    method: 'PUT',
+    body: JSON.stringify({ expiresInSeconds }),
+    token,
   })
 }
 

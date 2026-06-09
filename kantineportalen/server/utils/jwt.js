@@ -1,11 +1,15 @@
 import jwt from 'jsonwebtoken'
 
-export function createToken(user) {
+import { getTokenExpiresInSeconds } from './tokenSettings.js'
+
+export async function createToken(user) {
   const jwtSecret = process.env.JWT_SECRET
 
   if (!jwtSecret) {
     throw new Error('JWT_SECRET mangler i .env')
   }
+
+  const expiresIn = await getTokenExpiresInSeconds()
 
   return jwt.sign(
     {
@@ -14,7 +18,7 @@ export function createToken(user) {
       role: user.role,
     },
     jwtSecret,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' },
+    { expiresIn },
   )
 }
 
