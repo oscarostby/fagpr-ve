@@ -52,14 +52,26 @@ app.use(express.json({ limit: '50kb' }))
 app.use(express.urlencoded({ extended: true, limit: '50kb' }))
 app.use('/uploads', express.static(path.resolve(process.cwd(), 'server/uploads')))
 
+app.get('/api', (_req, res) => {
+  res.redirect(302, '/api/docs/')
+})
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' })
+})
+app.get('/api/openapi.json', (_req, res) => {
+  res.json(swaggerSpec)
+})
+app.get('/api/swagger', (_req, res) => {
+  res.redirect(302, '/api/docs/')
 })
 app.get('/api/swagger.json', (_req, res) => {
   res.json(swaggerSpec)
 })
 app.use('/api/docs', swaggerUiMiddleware.serve, swaggerUiMiddleware.setup(swaggerSpec, {
   customSiteTitle: 'Kantineportalen API docs',
+  swaggerOptions: {
+    persistAuthorization: true,
+  },
 }))
 
 app.use('/api/auth', authRoutes)
