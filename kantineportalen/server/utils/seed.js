@@ -115,22 +115,30 @@ try {
     { upsert: true, new: true, setDefaultsOnInsert: true },
   )
 
-  const adminUsername = process.env.SEED_ADMIN_USERNAME || 'admin'
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD || 'admin123'
+  const adminUsername = process.env.SEED_ADMIN_USERNAME?.trim()
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD?.trim()
 
-  if (process.env.NODE_ENV === 'production' && (!process.env.SEED_ADMIN_USERNAME || !process.env.SEED_ADMIN_PASSWORD)) {
-    throw new Error('SEED_ADMIN_USERNAME og SEED_ADMIN_PASSWORD må settes eksplisitt i production')
-  }
+  if (adminUsername || adminPassword) {
+    if (!adminUsername || !adminPassword) {
+      throw new Error('Både SEED_ADMIN_USERNAME og SEED_ADMIN_PASSWORD må settes for å opprette adminbruker')
+    }
 
-  const existingAdmin = await User.findOne({ username: adminUsername.toLowerCase() })
+    if (adminPassword.length < 12) {
+      throw new Error('SEED_ADMIN_PASSWORD må være minst 12 tegn')
+    }
 
-  if (!existingAdmin) {
-    await User.create({ username: adminUsername, password: adminPassword, role: 'admin' })
-    console.log(`[Seed] Adminbruker opprettet: ${adminUsername}`)
-  } else if (existingAdmin.role !== 'admin') {
-    throw new Error(`Seed-bruker ${adminUsername} finnes, men har ikke adminrolle`)
+    const existingAdmin = await User.findOne({ username: adminUsername.toLowerCase() })
+
+    if (!existingAdmin) {
+      await User.create({ username: adminUsername, password: adminPassword, role: 'admin' })
+      console.log(`[Seed] Adminbruker opprettet i MongoDB: ${adminUsername.toLowerCase()}`)
+    } else if (existingAdmin.role !== 'admin') {
+      throw new Error(`Seed-bruker ${adminUsername.toLowerCase()} finnes, men har ikke adminrolle`)
+    } else {
+      console.log(`[Seed] Adminbruker finnes allerede i MongoDB: ${adminUsername.toLowerCase()}`)
+    }
   } else {
-    console.log(`[Seed] Adminbruker finnes allerede: ${adminUsername}`)
+    console.log('[Seed] Hopper over adminbruker fordi SEED_ADMIN_USERNAME/SEED_ADMIN_PASSWORD ikke er satt')
   }
 
   console.log(`[Seed] Allergener, retter og ukemeny er klare. Migrerte retter uten bilde: ${migrationResult.modifiedCount}`)

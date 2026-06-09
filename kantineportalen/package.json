@@ -13,7 +13,8 @@
     "preview": "npm --prefix client run preview",
     "lint": "npm --prefix client run lint",
     "test:db": "node server/utils/testDatabaseConnection.js",
-    "seed": "node server/utils/seed.js"
+    "seed": "node server/utils/seed.js",
+    "seed:admin": "node server/utils/ensureAdminUser.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

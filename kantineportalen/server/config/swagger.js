@@ -56,16 +56,16 @@ export const swaggerSpec = swaggerJsdoc({
           type: 'object',
           properties: {
             id: { type: 'string', example: '665f7d9f6efc2e0012233445' },
-            username: { type: 'string', example: 'admin' },
-            role: { type: 'string', enum: ['admin', 'user'], example: 'admin' },
+            username: { type: 'string', description: 'Brukernavn fra MongoDB' },
+            role: { type: 'string', enum: ['admin', 'user'] },
           },
         },
         LoginRequest: {
           type: 'object',
           required: ['username', 'password'],
           properties: {
-            username: { type: 'string', example: 'admin' },
-            password: { type: 'string', format: 'password', example: 'admin123' },
+            username: { type: 'string', description: 'Brukernavn som ligger i MongoDB' },
+            password: { type: 'string', format: 'password', writeOnly: true, description: 'Passordet lagres hashet i MongoDB og vises ikke i API-et' },
           },
         },
         LoginResponse: {
