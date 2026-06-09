@@ -26,17 +26,31 @@ try {
 
   await connectDatabase()
 
-  const existingAdmin = await User.findOne({ username })
+  const existingAdmin = await User.findOne({ username }).select('+password')
+  const shouldResetPassword = process.env.RESET_ADMIN_PASSWORD === 'true'
 
   if (!existingAdmin) {
     await User.create({ username, password, role: 'admin' })
     console.log(`[Admin] Adminbruker opprettet i MongoDB: ${username}`)
-  } else if (existingAdmin.role !== 'admin') {
-    existingAdmin.role = 'admin'
-    await existingAdmin.save()
-    console.log(`[Admin] Eksisterende bruker fikk adminrolle: ${username}`)
   } else {
-    console.log(`[Admin] Adminbruker finnes allerede i MongoDB: ${username}`)
+    let changed = false
+
+    if (existingAdmin.role !== 'admin') {
+      existingAdmin.role = 'admin'
+      changed = true
+    }
+
+    if (shouldResetPassword) {
+      existingAdmin.password = password
+      changed = true
+    }
+
+    if (changed) {
+      await existingAdmin.save()
+      console.log(`[Admin] Adminbruker oppdatert i MongoDB: ${username}`)
+    } else {
+      console.log(`[Admin] Adminbruker finnes allerede i MongoDB: ${username}`)
+    }
   }
 
   await disconnectDatabase()
