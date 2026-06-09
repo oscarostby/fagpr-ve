@@ -8,7 +8,7 @@ import { Allergen } from '../models/Allergen.js'
 import { Dish } from '../models/Dish.js'
 import { User } from '../models/User.js'
 import { WeeklyMenu } from '../models/WeeklyMenu.js'
-import { defaultTokenExpiresInSeconds, setTokenExpiresInSeconds } from './tokenSettings.js'
+import { defaultTokenExpiresInSeconds, ensureTokenExpiresInSecondsDefault } from './tokenSettings.js'
 
 
 dotenv.config()
@@ -117,8 +117,12 @@ try {
   )
 
   const tokenExpiresInSeconds = Number(process.env.SEED_TOKEN_EXPIRES_IN_SECONDS) || defaultTokenExpiresInSeconds
-  await setTokenExpiresInSeconds(tokenExpiresInSeconds)
-  console.log(`[Seed] Token-utløp lagret i MongoDB: ${tokenExpiresInSeconds} sekunder`)
+  const tokenExpirationSetting = await ensureTokenExpiresInSecondsDefault(tokenExpiresInSeconds)
+  console.log(
+    tokenExpirationSetting.created
+      ? `[Seed] Token-utløp opprettet i MongoDB: ${tokenExpiresInSeconds} sekunder`
+      : `[Seed] Token-utløp finnes allerede i MongoDB og ble ikke overskrevet: ${tokenExpirationSetting.expiresInSeconds} sekunder`,
+  )
 
   const adminUsername = process.env.SEED_ADMIN_USERNAME?.trim()
   const adminPassword = process.env.SEED_ADMIN_PASSWORD?.trim()

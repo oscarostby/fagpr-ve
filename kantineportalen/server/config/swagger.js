@@ -162,21 +162,6 @@ export const swaggerSpec = swaggerJsdoc({
             friday: { type: 'string', nullable: true, example: '665f7d9f6efc2e0012233445' },
           },
         },
-        TokenExpirationSetting: {
-          type: 'object',
-          properties: {
-            expiresInSeconds: { type: 'integer', example: 604800 },
-            label: { type: 'string', example: '7 dager' },
-            updatedAt: { type: 'string', format: 'date-time' },
-          },
-        },
-        TokenExpirationInput: {
-          type: 'object',
-          required: ['expiresInSeconds'],
-          properties: {
-            expiresInSeconds: { type: 'integer', minimum: 300, maximum: 31536000, example: 604800 },
-          },
-        },
       },
       responses: {
         Unauthorized: {
@@ -361,30 +346,6 @@ export const swaggerSpec = swaggerJsdoc({
           requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/WeeklyMenuInput' } } } },
           responses: {
             200: { description: 'Ukemeny oppdatert', content: { 'application/json': { schema: { $ref: '#/components/schemas/WeeklyMenu' } } } },
-            401: { $ref: '#/components/responses/Unauthorized' },
-            403: { $ref: '#/components/responses/Forbidden' },
-          },
-        },
-      },
-      '/settings/token-expiration': {
-        get: {
-          tags: ['Settings'],
-          summary: 'Hent hvor lenge JWT-token varer',
-          security: [{ bearerAuth: [] }],
-          responses: {
-            200: { description: 'Token-utløp', content: { 'application/json': { schema: { $ref: '#/components/schemas/TokenExpirationSetting' } } } },
-            401: { $ref: '#/components/responses/Unauthorized' },
-            403: { $ref: '#/components/responses/Forbidden' },
-          },
-        },
-        put: {
-          tags: ['Settings'],
-          summary: 'Oppdater hvor lenge JWT-token varer',
-          security: [{ bearerAuth: [] }],
-          requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/TokenExpirationInput' } } } },
-          responses: {
-            200: { description: 'Token-utløp oppdatert', content: { 'application/json': { schema: { $ref: '#/components/schemas/TokenExpirationSetting' } } } },
-            400: { $ref: '#/components/responses/ValidationError' },
             401: { $ref: '#/components/responses/Unauthorized' },
             403: { $ref: '#/components/responses/Forbidden' },
           },

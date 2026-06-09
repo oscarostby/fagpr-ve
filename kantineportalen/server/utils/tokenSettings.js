@@ -33,23 +33,31 @@ export async function getTokenExpiresInSeconds() {
   return defaultTokenExpiresInSeconds
 }
 
-export async function setTokenExpiresInSeconds(seconds) {
+export async function ensureTokenExpiresInSecondsDefault(seconds = defaultTokenExpiresInSeconds) {
   const normalizedSeconds = Number(seconds)
 
   if (!Number.isInteger(normalizedSeconds) || normalizedSeconds < 300 || normalizedSeconds > 31_536_000) {
     throw new Error('Token-utløp må være mellom 5 minutter og 365 dager')
   }
 
-  const setting = await AppSetting.findOneAndUpdate(
-    { key: tokenExpirationSettingKey },
-    { key: tokenExpirationSettingKey, value: normalizedSeconds },
-    { upsert: true, new: true, setDefaultsOnInsert: true, runValidators: true },
-  )
+  const existingSetting = await AppSetting.findOne({ key: tokenExpirationSettingKey }).lean()
+  if (existingSetting) {
+    return {
+      key: existingSetting.key,
+      expiresInSeconds: Number(existingSetting.value),
+      label: formatTokenExpiration(Number(existingSetting.value)),
+      updatedAt: existingSetting.updatedAt,
+      created: false,
+    }
+  }
+
+  const setting = await AppSetting.create({ key: tokenExpirationSettingKey, value: normalizedSeconds })
 
   return {
     key: setting.key,
     expiresInSeconds: normalizedSeconds,
     label: formatTokenExpiration(normalizedSeconds),
     updatedAt: setting.updatedAt,
+    created: true,
   }
 }

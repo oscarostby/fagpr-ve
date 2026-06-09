@@ -77,20 +77,6 @@ export const allergenUpdateSchema = z.object({
   query: z.unknown().optional(),
 })
 
-export const tokenExpirationSchema = z.object({
-  body: z
-    .object({
-      expiresInSeconds: z
-        .number({ required_error: 'Token-utløp er påkrevd', invalid_type_error: 'Token-utløp må være et tall' })
-        .int('Token-utløp må være hele sekunder')
-        .min(300, 'Token-utløp må være minst 5 minutter')
-        .max(31_536_000, 'Token-utløp kan maks være 365 dager'),
-    })
-    .strict(),
-  params: z.unknown().optional(),
-  query: z.unknown().optional(),
-})
-
 export const menuUpdateSchema = z.object({
   body: z
     .object({
