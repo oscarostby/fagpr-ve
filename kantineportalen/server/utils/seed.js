@@ -116,7 +116,7 @@ try {
     { upsert: true, new: true, setDefaultsOnInsert: true },
   )
 
-  const tokenExpiresInSeconds = Number(process.env.SEED_TOKEN_EXPIRES_IN_SECONDS) || defaultTokenExpiresInSeconds
+  const tokenExpiresInSeconds = process.env.SEED_TOKEN_EXPIRES_IN_SECONDS ?? defaultTokenExpiresInSeconds
   const tokenExpirationSetting = await ensureTokenExpiresInSecondsDefault(tokenExpiresInSeconds)
   console.log(
     tokenExpirationSetting.created

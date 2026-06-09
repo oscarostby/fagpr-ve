@@ -1,4 +1,4 @@
-const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://134.122.56.191/api'
+const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api'
 const assetBaseUrl = apiBaseUrl.replace(/\/api\/?$/, '')
 
 export class ApiError extends Error {

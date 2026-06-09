@@ -12,6 +12,7 @@
     "build": "npm --prefix client run build",
     "preview": "npm --prefix client run preview",
     "lint": "npm --prefix client run lint",
+    "test": "node --test \"server/**/*.test.js\"",
     "test:db": "node server/utils/testDatabaseConnection.js",
     "seed": "node server/utils/seed.js",
     "seed:admin": "node server/utils/ensureAdminUser.js"

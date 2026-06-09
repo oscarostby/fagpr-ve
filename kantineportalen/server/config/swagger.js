@@ -2,7 +2,6 @@ import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 
 const port = process.env.PORT || 5001
-const publicApiUrl = process.env.PUBLIC_API_URL || 'http://134.122.56.191/api'
 const localApiUrl = `http://localhost:${port}/api`
 
 export const swaggerSpec = swaggerJsdoc({
@@ -11,13 +10,9 @@ export const swaggerSpec = swaggerJsdoc({
     info: {
       title: 'Kantineportalen API',
       version: '1.0.0',
-      description: 'OpenAPI-dokumentasjon for Kantineportalen backend. Frontend kjører lokalt, mens API-et ligger på serveren.',
+      description: 'OpenAPI-dokumentasjon for Kantineportalen backend i lokal utvikling.',
     },
     servers: [
-      {
-        url: publicApiUrl,
-        description: 'Produksjon',
-      },
       {
         url: localApiUrl,
         description: 'Lokal backend',

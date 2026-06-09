@@ -1,7 +1,30 @@
 import { AppSetting } from '../models/AppSetting.js'
 
 export const tokenExpirationSettingKey = 'jwt.tokenExpiresInSeconds'
+export const minTokenExpiresInSeconds = 5 * 60
+export const maxTokenExpiresInSeconds = 7 * 24 * 60 * 60
 export const defaultTokenExpiresInSeconds = 7 * 24 * 60 * 60
+export const tokenExpiresInSecondsCacheTtlMs = 60 * 1000
+
+let cachedTokenExpiresInSeconds = null
+let cachedTokenExpiresInSecondsAt = 0
+
+export function clearTokenExpiresInSecondsCache() {
+  cachedTokenExpiresInSeconds = null
+  cachedTokenExpiresInSecondsAt = 0
+}
+
+export function parseTokenExpiresInSeconds(rawValue) {
+  const value = Number(rawValue)
+
+  if (!Number.isInteger(value) || value < minTokenExpiresInSeconds || value > maxTokenExpiresInSeconds) {
+    throw new Error(
+      `${tokenExpirationSettingKey} må være et heltall mellom ${minTokenExpiresInSeconds} og ${maxTokenExpiresInSeconds} sekunder`,
+    )
+  }
+
+  return value
+}
 
 export function formatTokenExpiration(seconds) {
   if (seconds % 86400 === 0) {
@@ -22,42 +45,73 @@ export function formatTokenExpiration(seconds) {
   return `${seconds} sekunder`
 }
 
-export async function getTokenExpiresInSeconds() {
-  const setting = await AppSetting.findOne({ key: tokenExpirationSettingKey }).lean()
-  const value = Number(setting?.value)
+function warnInvalidTokenExpiration(rawValue, error) {
+  console.warn(
+    `[Auth] Ugyldig ${tokenExpirationSettingKey} i MongoDB: ${JSON.stringify(rawValue)}. ${error.message}. `
+      + `Bruker trygg fallback ${defaultTokenExpiresInSeconds} sekunder (${formatTokenExpiration(defaultTokenExpiresInSeconds)}).`,
+  )
+}
 
-  if (Number.isInteger(value) && value >= 300 && value <= 31_536_000) {
-    return value
+function resolveTokenExpiresInSeconds(setting) {
+  if (!setting) {
+    return defaultTokenExpiresInSeconds
   }
 
-  return defaultTokenExpiresInSeconds
+  try {
+    return parseTokenExpiresInSeconds(setting.value)
+  } catch (error) {
+    // Fallback er bevisst: login skal ikke stoppe på grunn av én feilkonfigurert setting.
+    // Feilen logges tydelig med faktisk MongoDB-verdi slik at drift kan rette key-en manuelt.
+    warnInvalidTokenExpiration(setting.value, error)
+    return defaultTokenExpiresInSeconds
+  }
+}
+
+export async function getTokenExpiresInSeconds() {
+  const now = Date.now()
+
+  // Kort cache reduserer ett ekstra MongoDB-kall per login, men lar manuelle MongoDB-endringer slå inn raskt.
+  if (cachedTokenExpiresInSeconds && now - cachedTokenExpiresInSecondsAt < tokenExpiresInSecondsCacheTtlMs) {
+    return cachedTokenExpiresInSeconds
+  }
+
+  const setting = await AppSetting.findOne({ key: tokenExpirationSettingKey }).lean()
+  const expiresInSeconds = resolveTokenExpiresInSeconds(setting)
+
+  cachedTokenExpiresInSeconds = expiresInSeconds
+  cachedTokenExpiresInSecondsAt = now
+
+  return expiresInSeconds
 }
 
 export async function ensureTokenExpiresInSecondsDefault(seconds = defaultTokenExpiresInSeconds) {
-  const normalizedSeconds = Number(seconds)
+  const normalizedSeconds = parseTokenExpiresInSeconds(seconds)
 
-  if (!Number.isInteger(normalizedSeconds) || normalizedSeconds < 300 || normalizedSeconds > 31_536_000) {
-    throw new Error('Token-utløp må være mellom 5 minutter og 365 dager')
-  }
+  const setting = await AppSetting.findOneAndUpdate(
+    { key: tokenExpirationSettingKey },
+    {
+      $setOnInsert: {
+        key: tokenExpirationSettingKey,
+        value: normalizedSeconds,
+      },
+    },
+    {
+      upsert: true,
+      new: true,
+      setDefaultsOnInsert: true,
+      runValidators: true,
+    },
+  ).lean()
 
-  const existingSetting = await AppSetting.findOne({ key: tokenExpirationSettingKey }).lean()
-  if (existingSetting) {
-    return {
-      key: existingSetting.key,
-      expiresInSeconds: Number(existingSetting.value),
-      label: formatTokenExpiration(Number(existingSetting.value)),
-      updatedAt: existingSetting.updatedAt,
-      created: false,
-    }
-  }
+  const expiresInSeconds = resolveTokenExpiresInSeconds(setting)
 
-  const setting = await AppSetting.create({ key: tokenExpirationSettingKey, value: normalizedSeconds })
+  clearTokenExpiresInSecondsCache()
 
   return {
     key: setting.key,
-    expiresInSeconds: normalizedSeconds,
-    label: formatTokenExpiration(normalizedSeconds),
+    expiresInSeconds,
+    label: formatTokenExpiration(expiresInSeconds),
     updatedAt: setting.updatedAt,
-    created: true,
+    created: Boolean(setting.createdAt && setting.updatedAt && setting.createdAt.getTime?.() === setting.updatedAt.getTime?.()),
   }
 }
