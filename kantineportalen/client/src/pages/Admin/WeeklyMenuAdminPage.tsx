@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { useAuth } from '@/auth/AuthContext'
 import { getDishes, getMenu, updateMenu, type ApiDish, type ApiWeeklyMenu, type MenuPayload } from '@/services/adminService'
-import { isUnauthorizedError } from '@/services/api'
+import { getAssetUrl, isUnauthorizedError } from '@/services/api'
 
 const days: Array<{ key: keyof MenuPayload; label: string }> = [
   { key: 'monday', label: 'Mandag' },
@@ -148,9 +148,17 @@ export function WeeklyMenuAdminPage() {
 
                 {selectedDish ? (
                   <>
-                    <span className="weekly-menu-dish-icon">
-                      <UtensilsCrossed aria-hidden="true" size={18} strokeWidth={1.8} />
-                    </span>
+                    {selectedDish.image ? (
+                      <img
+                        alt={`Forhåndsvisning av ${selectedDish.name}`}
+                        className="weekly-menu-dish-image"
+                        src={getAssetUrl(selectedDish.image)}
+                      />
+                    ) : (
+                      <span className="weekly-menu-dish-icon">
+                        <UtensilsCrossed aria-hidden="true" size={18} strokeWidth={1.8} />
+                      </span>
+                    )}
                     <strong>{selectedDish.name}</strong>
                     <span className="weekly-menu-change">{isSaving ? 'Lagrer...' : 'Endre matrett'}</span>
                   </>

@@ -1,4 +1,4 @@
-import { CookingPot, House, LogOut, Menu, Sprout, X } from 'lucide-react'
+import { BookOpen, CookingPot, House, LogOut, Menu, Sprout, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 
@@ -10,6 +10,7 @@ const navItems = [
   { to: '/admin', label: 'Hjem', end: true, icon: House },
   { to: '/admin/retter', label: 'Retter', icon: CookingPot },
   { to: '/admin/allergier', label: 'Allergier', icon: Sprout },
+  { to: '/admin/dokumentasjon', label: 'Dokumentasjon', icon: BookOpen },
 ]
 
 function Brand() {

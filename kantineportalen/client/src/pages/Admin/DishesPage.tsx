@@ -1,4 +1,4 @@
-import { ImagePlus, Pencil, Plus, Trash2, X } from 'lucide-react'
+import { ImagePlus, Pencil, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 
 import { useAuth } from '@/auth/AuthContext'
@@ -281,12 +281,6 @@ export function DishesPage() {
           <h1>Retter</h1>
           <p>Opprett og administrer matrettene i kantineportalen</p>
         </div>
-        {!editingId ? (
-          <button className="admin-primary-button" onClick={resetForm} type="button">
-            <Plus aria-hidden="true" size={18} />
-            Ny rett
-          </button>
-        ) : null}
       </header>
 
       {error ? (

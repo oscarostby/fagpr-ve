@@ -10,7 +10,7 @@ type WeeklyMenuCardProps = {
 }
 
 const Card = styled.article.attrs<{ $isToday: boolean }>(({ $isToday }) => ({
-  className: `relative flex min-h-[92px] items-start justify-between rounded-[8px] bg-[#f4f6f2] px-3 py-3 text-[#183630] md:h-[165px] md:flex-col md:justify-start md:rounded-[9px] md:px-4 md:py-4 xl:h-[175px] xl:px-5 xl:py-5 ${
+  className: `relative flex min-h-[92px] items-start justify-between rounded-[8px] bg-[#f4f6f2] px-3 py-3 text-[#183630] md:h-[165px] md:flex-col md:items-center md:justify-start md:rounded-[9px] md:px-4 md:py-4 xl:h-[175px] xl:px-5 xl:py-5 ${
     $isToday
       ? 'border border-[#5ba05f] ring-1 ring-[#5ba05f]'
       : 'border border-[#edf0ea]'
@@ -32,7 +32,7 @@ const Card = styled.article.attrs<{ $isToday: boolean }>(({ $isToday }) => ({
 `
 
 const TextGroup = styled.div.attrs({
-  className: 'min-w-0 md:text-center',
+  className: 'min-w-0 md:w-full md:text-center',
 })`
   @media (max-width: 1024px) {
     text-align: left;
@@ -46,7 +46,7 @@ const DayLabel = styled.p.attrs({
 
 const DishTitle = styled.h3.attrs({
   className:
-    'mt-1 max-w-[210px] text-[15px] font-bold leading-[1.3] tracking-[-0.025em] text-[#1d332f] md:mt-3 md:max-w-[170px] md:text-[16px] xl:mt-4 xl:max-w-[190px] xl:text-[17px]',
+    'mt-1 max-w-[210px] text-[15px] font-bold leading-[1.3] tracking-[-0.025em] text-[#1d332f] md:mx-auto md:mt-3 md:max-w-[170px] md:text-[16px] xl:mt-4 xl:max-w-[190px] xl:text-[17px]',
 })`
   @media (min-width: 768px) and (max-height: 850px) {
     margin-top: 12px;

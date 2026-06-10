@@ -272,6 +272,14 @@
   color: #4d9362;
 }
 
+.weekly-menu-dish-image {
+  width: min(100%, 150px);
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(23, 55, 47, 0.12);
+}
+
 .weekly-menu-slot strong {
   max-width: 95px;
   font-size: 12px;
@@ -884,6 +892,171 @@
   gap: 6px;
 }
 
+.documentation-admin {
+  width: 100%;
+}
+
+.documentation-intro {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 34px;
+  padding: 22px 24px;
+  border: 1px solid #d5e4da;
+  border-radius: 8px;
+  background: #f2f8f3;
+}
+
+.documentation-intro-icon,
+.documentation-guide-icon,
+.documentation-tip-icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  background: #e4f2e7;
+  color: #347b50;
+}
+
+.documentation-intro-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.documentation-intro h2,
+.documentation-guide h2,
+.documentation-tip h3 {
+  margin: 0;
+  color: #1c4335;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+.documentation-intro h2 {
+  font-size: 19px;
+}
+
+.documentation-intro p,
+.documentation-guide-description,
+.documentation-tip p {
+  color: #50665d;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.documentation-intro p {
+  margin: 5px 0 0;
+}
+
+.documentation-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+}
+
+.documentation-guide {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: clamp(20px, 2vw, 28px);
+  border: 1px solid #dfe7e2;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.documentation-guide-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.documentation-guide-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.documentation-guide h2 {
+  font-size: 18px;
+}
+
+.documentation-guide-description {
+  min-height: 44px;
+  margin: 18px 0;
+}
+
+.documentation-steps {
+  display: grid;
+  gap: 15px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.documentation-steps li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+}
+
+.documentation-steps li > span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 999px;
+  background: #edf7ef;
+  color: #347b50;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.documentation-steps p {
+  margin: 2px 0 0;
+  color: #354f44;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.documentation-link {
+  align-self: flex-start;
+  margin-top: auto;
+  text-decoration: none;
+}
+
+.documentation-tips {
+  margin-top: 46px;
+}
+
+.documentation-tip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.documentation-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #e0e8e3;
+  border-radius: 8px;
+  background: #fbfdfb;
+}
+
+.documentation-tip-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.documentation-tip h3 {
+  font-size: 16px;
+}
+
+.documentation-tip p {
+  margin: 5px 0 0;
+}
+
 .login-page {
   display: grid;
   min-height: 100vh;
@@ -1114,6 +1287,10 @@
   .allergen-card-grid {
     grid-template-columns: 1fr;
   }
+
+  .documentation-guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 850px) {
@@ -1284,6 +1461,11 @@
     height: 29px;
   }
 
+  .weekly-menu-dish-image {
+    width: 74px;
+    aspect-ratio: 16 / 10;
+  }
+
   .weekly-menu-plus svg {
     width: 14px;
   }
@@ -1339,6 +1521,29 @@
 
   .allergen-card-content p {
     display: none;
+  }
+
+  .documentation-intro {
+    align-items: flex-start;
+    margin-bottom: 22px;
+    padding: 18px;
+  }
+
+  .documentation-guide-grid,
+  .documentation-tip-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .documentation-guide {
+    padding: 18px;
+  }
+
+  .documentation-guide-description {
+    min-height: 0;
+  }
+
+  .documentation-tips {
+    margin-top: 32px;
   }
 }
 

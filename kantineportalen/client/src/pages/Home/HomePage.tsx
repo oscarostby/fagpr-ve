@@ -13,7 +13,7 @@ const PageMain = styled.main.attrs({
 
 const PageInner = styled.section.attrs({
   className:
-    'mx-auto flex h-full w-full max-w-[1200px] flex-col px-7 pb-0 pt-6 md:px-[34px] md:pt-[10px] xl:pt-[16px]',
+    'mx-auto flex h-full w-full max-w-[1200px] flex-col px-7 pb-2 pt-6 md:px-[34px] md:pb-3 md:pt-[10px] xl:pt-[16px]',
 })`
   @media (min-width: 768px) and (max-height: 850px) {
     padding-top: 8px;

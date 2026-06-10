@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { Pencil, Plus, ShieldCheck, Trash2, X } from 'lucide-react'
+import { Pencil, ShieldCheck, Trash2, X } from 'lucide-react'
 
 import { useAuth } from '@/auth/AuthContext'
 import {
@@ -99,10 +99,6 @@ export function AllergensPage() {
           <h1>Allergier</h1>
           <p>Administrer allergener som kan knyttes til matrettene</p>
         </div>
-        <button className="admin-primary-button" onClick={resetForm} type="button">
-          <Plus aria-hidden="true" size={18} />
-          Ny allergi
-        </button>
       </header>
 
       {error ? (

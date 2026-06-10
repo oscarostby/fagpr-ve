@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import leavesImage from '@/assets/images/blader.png'
 
 const LeafCrop = styled.span.attrs({
-  className: 'absolute bottom-[-6px] left-7 block h-[122px] w-[142px] overflow-hidden md:left-[42px] md:h-[128px] md:w-[150px]',
+  className: 'absolute bottom-[-6px] left-7 block h-[132px] w-[142px] overflow-hidden md:left-[42px] md:h-[142px] md:w-[150px]',
 })``
 
 const LeafImage = styled.img.attrs({
@@ -11,14 +11,14 @@ const LeafImage = styled.img.attrs({
 })``
 
 const SiteFooter = styled.footer.attrs({
-  className: 'relative mt-6 h-[105px] shrink-0 overflow-hidden bg-[#f1f4ec] md:mt-0 md:h-[105px]',
+  className: 'relative mt-8 h-[150px] shrink-0 overflow-hidden bg-[#f1f4ec] md:mt-10 md:h-[150px]',
 })`
   @media (min-width: 768px) and (max-height: 850px) {
-    height: 104px;
+    height: 140px;
   }
 
   @media (max-width: 1024px) {
-    height: 112px;
+    height: 150px;
   }
 `
 
@@ -31,7 +31,7 @@ const FooterInner = styled.div.attrs({
 })``
 
 const Divider = styled.div.attrs({
-  className: 'h-[72px] w-px bg-[#2c8335] md:h-[86px]',
+  className: 'h-[100px] w-px bg-[#2c8335] md:h-[108px]',
 })``
 
 const ContactAddress = styled.address.attrs({
@@ -43,11 +43,11 @@ const ContactHeading = styled.p.attrs({
 })``
 
 const EmailLink = styled.a.attrs({
-  className: 'mt-4 block min-h-11 py-2 text-[16px] font-semibold tracking-[-0.02em] hover:underline',
+  className: 'mt-2 flex min-h-11 items-center text-[16px] font-semibold tracking-[-0.02em] hover:underline',
 })``
 
 const PhoneLink = styled.a.attrs({
-  className: 'block min-h-11 py-2 text-[16px] font-semibold tracking-[-0.02em] hover:underline',
+  className: 'flex min-h-11 items-center text-[16px] font-semibold tracking-[-0.02em] hover:underline',
 })``
 
 function LeafGraphic() {
