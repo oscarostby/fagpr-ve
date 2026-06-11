@@ -5,7 +5,7 @@ import { LunchCard } from '@/components/LunchCard'
 import { WeeklyMenuCard } from '@/components/WeeklyMenuCard'
 import { getFrontendMenu, type FrontendMenu } from '@/services/menuService'
 import type { Weekday } from '@/types/menu'
-import { dietaryTagOptions, hasSelectedDietaryTags, type DietaryTag } from '@/utils/dietaryTags'
+import { dietaryTagIcon, dietaryTagOptions, hasSelectedDietaryTags, type DietaryTag } from '@/utils/dietaryTags'
 
 const PageMain = styled.main.attrs({
   className: 'flex-1 overflow-visible',
@@ -167,16 +167,21 @@ export function HomePage() {
           <WeeklyHeading id="weekly-menu-heading">Ukesmeny</WeeklyHeading>
           <FilterBox aria-label="Filtrer ukesmenyen etter kostholdsmerker">
             <FilterLabel>Filter:</FilterLabel>
-            {dietaryTagOptions.map((option) => (
-              <FilterOption key={option.value}>
-                <input
-                  checked={selectedDietaryTags.includes(option.value)}
-                  onChange={() => toggleDietaryFilter(option.value)}
-                  type="checkbox"
-                />
-                {option.label}
-              </FilterOption>
-            ))}
+            {dietaryTagOptions.map((option) => {
+              const OptionIcon = dietaryTagIcon(option.value)
+
+              return (
+                <FilterOption key={option.value}>
+                  <input
+                    checked={selectedDietaryTags.includes(option.value)}
+                    onChange={() => toggleDietaryFilter(option.value)}
+                    type="checkbox"
+                  />
+                  <OptionIcon aria-hidden="true" className="h-[18px] w-[18px] shrink-0 text-[#34783c]" strokeWidth={1.8} />
+                  {option.label}
+                </FilterOption>
+              )
+            })}
           </FilterBox>
           <WeeklyGrid>
             {filteredWeeklyMenu.map((item) => (

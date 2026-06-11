@@ -1,5 +1,6 @@
-import { ImagePlus, Pencil, Trash2, X } from 'lucide-react'
+import { ImagePlus, Pencil, Plus, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 
 import { useAuth } from '@/auth/AuthContext'
 import {
@@ -378,18 +379,22 @@ export function DishesPage() {
             <legend>Allergener</legend>
             {allergens.length === 0 ? <p>Ingen allergier registrert.</p> : null}
             <div className="dish-option-grid">
-            {allergens.map((allergen) => (
+              {allergens.map((allergen) => (
                 <label className="dish-option" key={allergen._id}>
-                <input
-                  checked={form.allergens.includes(allergen._id)}
-                  onChange={() => toggleAllergen(allergen._id)}
-                  type="checkbox"
-                />
+                  <input
+                    checked={form.allergens.includes(allergen._id)}
+                    onChange={() => toggleAllergen(allergen._id)}
+                    type="checkbox"
+                  />
                   <span>{allergen.name}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
+                </label>
+              ))}
+            </div>
+            <Link className="admin-secondary-button dish-add-allergen-link" to="/admin/allergier">
+              <Plus aria-hidden="true" size={17} />
+              Legg til nytt allergen
+            </Link>
+          </fieldset>
 
           <fieldset className="dish-options">
             <legend>Kostholdsmerker</legend>

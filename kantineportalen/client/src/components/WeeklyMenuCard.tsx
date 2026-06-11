@@ -62,7 +62,7 @@ const DishTitle = styled.h3.attrs({
 
 const Badges = styled.div.attrs({
   className:
-    'ml-3 flex max-w-[160px] flex-wrap justify-end gap-1.5 md:absolute md:inset-x-3 md:bottom-3 md:ml-0 md:max-w-none md:justify-center',
+    'ml-3 flex max-w-[175px] flex-wrap justify-end gap-1 md:absolute md:inset-x-2 md:bottom-2 md:ml-0 md:max-w-none md:justify-center',
 })`
   @media (min-width: 768px) and (max-height: 850px) {
     bottom: 8px;
@@ -78,12 +78,12 @@ const Badges = styled.div.attrs({
 
 const Badge = styled.span.attrs({
   className:
-    'inline-flex items-center gap-1 rounded-full border border-[#76aa79] bg-[#edf7ec] px-1.5 py-0.5 text-[10px] font-bold leading-tight text-[#195c29]',
+    'inline-flex items-center rounded-full border border-[#76aa79] bg-[#edf7ec] px-1.5 py-[1px] text-[9px] font-bold leading-tight text-[#195c29]',
 })``
 
 const DietaryIconBadge = styled.span.attrs({
   className:
-    'grid h-6 w-6 place-items-center rounded-full border border-[#76aa79] bg-[#edf7ec] text-[#286f36]',
+    'grid h-5 w-5 place-items-center rounded-full border border-[#76aa79] bg-[#edf7ec] text-[#286f36]',
 })``
 
 const iconClassName =
@@ -109,7 +109,7 @@ export function WeeklyMenuCard({ item, isToday = false }: WeeklyMenuCardProps) {
 
             return (
               <DietaryIconBadge aria-label={label} key={tag} role="img" title={label}>
-                <TagIcon aria-hidden="true" size={15} strokeWidth={1.8} />
+                <TagIcon aria-hidden="true" size={13} strokeWidth={1.8} />
               </DietaryIconBadge>
             )
           })}

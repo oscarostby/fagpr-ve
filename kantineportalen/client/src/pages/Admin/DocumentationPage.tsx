@@ -5,8 +5,11 @@ import {
   CookingPot,
   Image,
   Leaf,
+  LogOut,
+  Pencil,
   ShieldCheck,
   Sprout,
+  Wrench,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -25,17 +28,17 @@ const guides = [
     linkLabel: 'Gå til retter',
   },
   {
-    icon: CalendarDays,
-    title: 'Sett opp ukemenyen',
-    description: 'Velg hvilken rett som skal serveres hver ukedag.',
+    icon: Image,
+    title: 'Last opp bilder',
+    description: 'Alle nye retter må ha et bilde før de kan lagres.',
     steps: [
-      'Åpne Hjem fra menyen.',
-      'Trykk på boksen for dagen du vil endre.',
-      'Velg en rett fra listen.',
-      'Valget lagres automatisk. Bildet vises som forhåndsvisning i dagsboksen.',
+      'Velg bildeområdet i Opprett rett-skjemaet.',
+      'Velg en JPG-, PNG- eller WEBP-fil på maksimalt 5 MB.',
+      'Kontroller forhåndsvisningen før retten lagres.',
+      'Ved redigering beholdes det gamle bildet hvis du ikke velger et nytt.',
     ],
-    link: '/admin',
-    linkLabel: 'Gå til ukemenyen',
+    link: '/admin/retter',
+    linkLabel: 'Last opp bilde',
   },
   {
     icon: Sprout,
@@ -49,6 +52,32 @@ const guides = [
     ],
     link: '/admin/allergier',
     linkLabel: 'Gå til allergier',
+  },
+  {
+    icon: CalendarDays,
+    title: 'Administrer ukemenyen',
+    description: 'Velg hvilken rett som skal serveres hver ukedag.',
+    steps: [
+      'Åpne Hjem fra adminmenyen.',
+      'Trykk på dagsboksen du vil endre.',
+      'Velg en eksisterende rett, eller bruk Opprett ny rett nederst i listen.',
+      'Valget lagres automatisk og vises på den offentlige forsiden.',
+    ],
+    link: '/admin',
+    linkLabel: 'Gå til ukemenyen',
+  },
+  {
+    icon: Pencil,
+    title: 'Rediger eller slett innhold',
+    description: 'Hold eksisterende retter og allergier oppdatert.',
+    steps: [
+      'Finn retten eller allergien i oversikten.',
+      'Trykk Rediger for å hente informasjonen inn i skjemaet.',
+      'Gjør endringene og lagre dem.',
+      'Bruk Slett bare når innholdet ikke lenger skal være tilgjengelig.',
+    ],
+    link: '/admin/retter',
+    linkLabel: 'Administrer innhold',
   },
 ]
 
@@ -73,6 +102,16 @@ const tips = [
     title: 'Sjekk forsiden',
     text: 'Åpne den offentlige forsiden etter endringer for å kontrollere bilder og informasjon.',
   },
+  {
+    icon: LogOut,
+    title: 'Logg ut etter bruk',
+    text: 'Bruk Logg ut nederst i adminmenyen når du er ferdig, særlig på delte datamaskiner.',
+  },
+  {
+    icon: Wrench,
+    title: 'Ved feil',
+    text: 'Oppdater siden og prøv igjen. Kontroller bildeformat og felt. Kontakt systemansvarlig hvis feilen fortsetter.',
+  },
 ]
 
 export function DocumentationPage() {
@@ -80,8 +119,8 @@ export function DocumentationPage() {
     <section className="documentation-admin">
       <header className="admin-page-heading">
         <div>
-          <h1>Dokumentasjon</h1>
-          <p>En enkel guide til hvordan Kantineportalen administreres</p>
+          <h1>Brukerveiledning</h1>
+          <p>Hvordan bruke løsningen og administrere innhold i Kantineportalen</p>
         </div>
       </header>
 
@@ -90,9 +129,10 @@ export function DocumentationPage() {
           <BookOpen aria-hidden="true" size={25} strokeWidth={1.8} />
         </span>
         <div>
-          <h2>Kom raskt i gang</h2>
+          <h2>Hvordan bruke løsningen</h2>
           <p>
-            Start med å opprette allergier og retter. Deretter kan rettene legges inn på riktige dager i ukemenyen.
+            Opprett nødvendige allergier og retter, og legg deretter rettene inn på riktige dager i ukemenyen.
+            Endringene vises på den offentlige forsiden.
           </p>
         </div>
       </div>
